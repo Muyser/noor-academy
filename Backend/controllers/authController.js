@@ -3,6 +3,18 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import cloudinary from '../config/cloudinary.js';
+import nodemailer from 'nodemailer';
+
+// Configure Nodemailer transporter
+const transporter = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+  port: process.env.EMAIL_PORT || 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 const generateToken = (id, role) => {
   return jwt.sign({ id, role }, process.env.JWT_SECRET || 'secret123', {
@@ -88,29 +100,52 @@ export const loginUser = async (req, res) => {
   }
 };
 
+
 // @route POST /api/auth/forgot-password
 export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
+    }
+
     const user = await User.findOne({ email: email.toLowerCase() });
 
+    // Always respond with success for security (prevent email enumeration)
     if (!user) {
-      return res.json({ message: 'Password reset link sent to email if account exists' });
+      return res.json({ message: 'If an account exists with that email, a password reset link has been sent.' });
     }
 
     const resetToken = crypto.randomBytes(20).toString('hex');
     user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
-    user.resetPasswordExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+    user.resetPasswordExpires = Date.now() + 15 * 60 * 1000; // 15 minutes
 
     await user.save();
 
-    // In production, integrate email sending service (NodeMailer / SendGrid)
-    res.json({
-      message: 'Password reset link sent to email if account exists',
-      resetToken, // Returned for dev/testing environment
-    });
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
+
+    // Send Email
+    const mailOptions = {
+      from: `"Noor Academy" <${process.env.EMAIL_USER}>`,
+      to: user.email,
+      subject: 'Password Reset Request - Noor Academy',
+      html: `
+        <div style="font-family: Arial, sans-serif; padding: 20px; color: #112d27;">
+          <h2>Noor Academy Password Reset</h2>
+          <p>You requested a password reset for your account.</p>
+          <p>Click the button below to reset your password. This link is valid for 15 minutes:</p>
+          <a href="${resetUrl}" style="display: inline-block; padding: 12px 24px; background-color: #009688; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 15px 0;">Reset Password</a>
+          <p>If you didn't request this, please ignore this email.</p>
+        </div>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.json({ message: 'Password reset link sent to email if account exists' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Forgot password error:', error);
+    res.status(500).json({ message: error.message || 'Server error sending email' });
   }
 };
 

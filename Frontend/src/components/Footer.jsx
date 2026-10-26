@@ -14,7 +14,6 @@ export default function Footer() {
     { label: t('footer.languages') || (lang === 'ar' ? 'اللغات' : 'Languages'), to: '/languages' },
     { label: t('footer.learning') || (lang === 'ar' ? 'رحلة التعلّم' : 'Learning'), to: '/learning' },
     { label: t('footer.faq') || (lang === 'ar' ? 'الأسئلة الشائعة' : 'FAQ'), to: '/faq' },
-    { label: t('footer.verifyCertificate') || (lang === 'ar' ? 'التحقق من الشهادات' : 'Verify Certificate'), to: '/certificates/verify' },
   ];
 
   return (

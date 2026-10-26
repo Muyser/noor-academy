@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 import { 
-  LayoutDashboard, BookOpen, Award, Bell, User, 
+  LayoutDashboard, BookOpen, Award, User, 
   Settings, LogOut, Menu, X, GraduationCap, Globe 
 } from 'lucide-react';
 import { useI18n } from '@/lib/useI18n';

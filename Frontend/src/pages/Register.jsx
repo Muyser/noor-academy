@@ -92,14 +92,6 @@ export default function Register() {
         </>
       }
     >
-      <Button
-        variant="outline"
-        className="w-full h-12 text-xs sm:text-sm font-bold mb-6 border-gray-200 hover:bg-gray-50 rounded-xl"
-        type="button"
-      >
-        <GoogleIcon className="w-5 h-5 me-2" />
-        {isAr ? "المتابعة باستخدام Google" : "Continue with Google"}
-      </Button>
 
       <div className="relative mb-6">
         <div className="absolute inset-0 flex items-center">

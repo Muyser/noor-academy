@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 167 30% 97%;
+    --foreground: 176 30% 13%;
+    --card: 0 0% 100%;
+    --card-foreground: 176 30% 13%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 176 30% 13%;
+    --primary: 181 69% 28%;
+    --primary-foreground: 0 0% 100%;
+    --primary-dark: 186 85% 19%;
+    --secondary: 167 12% 93%;
+    --secondary-foreground: 176 30% 13%;
+    --muted: 167 12% 93%;
+    --muted-foreground: 172 9% 42%;
+    --accent: 16 88% 54%;
+    --accent-foreground: 0 0% 100%;
+    --accent-dark: 9 79% 53%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 167 14% 90%;
+    --input: 167 14% 90%;
+    --ring: 181 69% 28%;
+    --radius: 0.75rem;
+    --font-heading: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+    --font-body: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --font-arabic: 'Cairo', 'Tajawal', ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .dark {
+    --background: 176 30% 8%;
+    --foreground: 0 0% 98%;
+    --card: 176 30% 11%;
+    --card-foreground: 0 0% 98%;
+    --popover: 176 30% 11%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 181 69% 45%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 176 20% 18%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 176 20% 18%;
+    --muted-foreground: 167 10% 65%;
+    --accent: 16 88% 54%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 176 20% 22%;
+    --input: 176 20% 22%;
+    --ring: 181 69% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+
+  [dir="rtl"] body,
+  [dir="rtl"] .font-body,
+  [dir="rtl"] .font-heading,
+  [dir="rtl"] .font-display {
+    font-family: var(--font-arabic);
+  }
+}
+
+@layer utilities {
+  .container-page {
+    @apply mx-auto w-full max-w-[1280px] px-4 sm:px-6 lg:px-8;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.4);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.6);
+}

@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Environment Variables (CRITICAL FOR SECURITY)
+.env
+.env.local
+.env.production
+.env.development
+
+# Logs & Debugging
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# Uploaded Files & Local Storage
+uploads/
+temp/
+*.tmp
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Production Builds (if applicable)
+dist/
+build/

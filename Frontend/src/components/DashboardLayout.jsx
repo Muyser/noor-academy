@@ -23,7 +23,6 @@ export default function DashboardLayout() {
     { icon: BookOpen, label: t('dashboard.myCourses') || 'My Courses', to: '/dashboard/courses' },
     { icon: GraduationCap, label: t('dashboard.continueLearning') || 'Learning Portal', to: '/learning' },
     { icon: Award, label: t('dashboard.certificates') || 'My Certificates', to: '/dashboard/certificates' },
-    { icon: Bell, label: t('dashboard.notifications') || 'Notifications', to: '/dashboard/notifications' },
     { icon: User, label: t('dashboard.profile') || 'My Profile', to: '/profile' },
     { icon: Settings, label: t('dashboard.settings') || 'Settings', to: '/settings' },
   ];

@@ -16,6 +16,10 @@ export default function AdminCertificates() {
   const isAr = lang === 'ar';
 
   const [certificates, setCertificates] = useState([]);
+  const [stats, setStats] = useState({
+    total: 0,
+    thisMonth: 0,
+  });
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedCert, setSelectedCert] = useState(null);
@@ -48,6 +52,13 @@ export default function AdminCertificates() {
       }));
 
       setCertificates(formatted);
+
+      // Compute dynamic stats counters
+      const currentMonthPrefix = new Date().toISOString().slice(0, 7);
+      setStats({
+        total: formatted.length,
+        thisMonth: formatted.filter(c => c.issue_date && c.issue_date.startsWith(currentMonthPrefix)).length,
+      });
     } catch (err) {
       console.error('Failed to fetch certificates', err);
       toast({
@@ -72,79 +83,77 @@ export default function AdminCertificates() {
   );
 
   return (
-    <div className={`space-y-6 ${isAr ? 'dir-rtl' : 'dir-ltr'}`}>
+    <div className={`max-w-6xl mx-auto space-y-6 px-3 sm:px-0 ${isAr ? 'dir-rtl' : 'dir-ltr'}`}>
       
       {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-gray-100">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white rounded-2xl sm:rounded-3xl border border-gray-100 p-5 sm:p-6 shadow-sm">
         <div>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-[#112d27]">
+          <h1 className="text-xl sm:text-2xl font-bold text-[#112d27] tracking-tight">
             {isAr ? 'سجل الشهادات الصادرة' : 'Issued Certificates'}
           </h1>
-          <p className="text-xs sm:text-sm font-medium text-gray-500 mt-1">
+          <p className="text-xs sm:text-sm font-normal text-gray-500 mt-1">
             {isAr ? 'استعراض وإدارة جميع شهادات الطلاب المعتمدة الصادرة تلقائياً عند إكمال الدورات.' : 'View, search, and verify all student certificates generated upon course completion.'}
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="relative max-w-xs w-full">
-            <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <Input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder={isAr ? 'ابحث باسم الطالب أو الدورة...' : 'Search student or course...'}
-              className="ps-9 h-10 text-xs sm:text-sm font-semibold border-gray-200 focus:border-[#009688] rounded-xl"
-            />
-          </div>
+        <div className="relative w-full sm:max-w-xs shrink-0">
+          <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder={isAr ? 'ابحث باسم الطالب أو الدورة...' : 'Search student or course...'}
+            className="ps-9 h-10 text-xs sm:text-sm font-normal border-gray-200 focus:border-[#009688] rounded-xl w-full"
+          />
         </div>
       </div>
 
-      {/* Summary Stat Bar */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm flex items-center justify-between">
+      {/* Summary Stat Bar with Dynamic Counters */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+        <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5 shadow-sm flex items-center justify-between">
           <div>
-            <p className="text-xs font-bold text-gray-400">{isAr ? 'إجمالي الشهادات' : 'Total Issued'}</p>
-            <p className="text-xl font-black text-[#112d27]">{certificates.length}</p>
+            <p className="text-xs font-bold text-gray-400">{isAr ? 'إجمالي الشهادات الصادرة' : 'Total Issued'}</p>
+            <p className="text-xl sm:text-2xl font-bold text-[#112d27] mt-0.5">{stats.total}</p>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-[#009688]/10 text-[#009688] flex items-center justify-center font-bold">
+          <div className="w-10 h-10 rounded-xl bg-[#009688]/10 text-[#009688] flex items-center justify-center font-bold shrink-0">
             <Award className="w-5 h-5" />
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm flex items-center justify-between">
+        <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5 shadow-sm flex items-center justify-between">
           <div>
-            <p className="text-xs font-bold text-gray-400">{isAr ? 'الحالة المعيارية' : 'Verification Status'}</p>
-            <p className="text-xl font-black text-emerald-600">{isAr ? 'موثقة 100%' : '100% Verified'}</p>
+            <p className="text-xs font-bold text-gray-400">{isAr ? 'شهادات هذا الشهر' : 'Issued This Month'}</p>
+            <p className="text-xl sm:text-2xl font-bold text-emerald-600 mt-0.5">{stats.thisMonth}</p>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold shrink-0">
             <ShieldCheck className="w-5 h-5" />
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm flex items-center justify-between">
+        <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5 shadow-sm flex items-center justify-between">
           <div>
-            <p className="text-xs font-bold text-gray-400">{isAr ? 'توليد الشهادات' : 'Generation Engine'}</p>
-            <p className="text-xl font-black text-[#009688]">{isAr ? 'تلقائي فوري' : 'Instant Auto-Stamped'}</p>
+            <p className="text-xs font-bold text-gray-400">{isAr ? 'حالة النظام' : 'System Status'}</p>
+            <p className="text-sm sm:text-base font-bold text-[#009688] mt-1">{isAr ? 'متصل وفعال' : 'Online & Active'}</p>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-[#009688]/10 text-[#009688] flex items-center justify-center font-bold">
+          <div className="w-10 h-10 rounded-xl bg-[#009688]/10 text-[#009688] flex items-center justify-center font-bold shrink-0">
             <FileText className="w-5 h-5" />
           </div>
         </div>
       </div>
 
       {/* Certificates Data Table */}
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-gray-100 overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-start text-xs sm:text-sm">
             <thead className="bg-[#f8fcfb] text-gray-400 text-[11px] font-bold uppercase tracking-wider border-b border-gray-100">
               <tr>
-                <th className="px-4 py-3.5 text-start">{isAr ? 'اسم الطالب' : 'Student Name'}</th>
-                <th className="px-4 py-3.5 text-start">{isAr ? 'عنوان الدورة' : 'Course Title'}</th>
-                <th className="px-4 py-3.5 text-start">{isAr ? 'كود التوثيق' : 'Certificate ID'}</th>
-                <th className="px-4 py-3.5 text-start">{isAr ? 'تاريخ الإصدار' : 'Issue Date'}</th>
-                <th className="px-4 py-3.5 text-end">{isAr ? 'المعاينة والطباعة' : 'Actions'}</th>
+                <th className="px-4 sm:px-6 py-3.5 text-start">{isAr ? 'اسم الطالب' : 'Student Name'}</th>
+                <th className="px-4 sm:px-6 py-3.5 text-start">{isAr ? 'عنوان الدورة' : 'Course Title'}</th>
+                <th className="px-4 sm:px-6 py-3.5 text-start">{isAr ? 'كود التوثيق' : 'Certificate ID'}</th>
+                <th className="px-4 sm:px-6 py-3.5 text-start">{isAr ? 'تاريخ الإصدار' : 'Issue Date'}</th>
+                <th className="px-4 sm:px-6 py-3.5 text-end">{isAr ? 'المعاينة والطباعة' : 'Actions'}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50 font-medium text-[#112d27]">
+            <tbody className="divide-y divide-gray-50 font-normal text-[#112d27]">
               {loading ? (
                 <tr>
                   <td colSpan={5} className="text-center py-12">
@@ -153,7 +162,7 @@ export default function AdminCertificates() {
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-12 text-gray-400 font-semibold text-xs">
+                  <td colSpan={5} className="text-center py-12 text-gray-400 font-normal text-xs">
                     {isAr ? 'لا توجد شهادات مطابقة للبحث.' : 'No certificates found matching search.'}
                   </td>
                 </tr>
@@ -162,37 +171,37 @@ export default function AdminCertificates() {
                   <tr key={cert.id} className="hover:bg-[#f8fcfb]/80 transition-colors">
                     
                     {/* Student Info */}
-                    <td className="px-4 py-3.5 font-bold">
+                    <td className="px-4 sm:px-6 py-3.5 font-bold">
                       <div className="flex items-center gap-2.5">
                         <div className="w-8 h-8 rounded-xl bg-[#009688]/10 text-[#009688] flex items-center justify-center shrink-0">
                           <User className="w-4 h-4" />
                         </div>
                         <div>
-                          <p className="text-[#112d27] font-extrabold">{cert.student_name}</p>
-                          <p className="text-[10px] text-gray-400 font-normal">{cert.student_email}</p>
+                          <p className="text-[#112d27] font-bold truncate max-w-[130px] sm:max-w-[180px]">{cert.student_name}</p>
+                          <p className="text-[10px] text-gray-400 font-normal truncate max-w-[130px] sm:max-w-[180px]">{cert.student_email}</p>
                         </div>
                       </div>
                     </td>
 
                     {/* Course Info */}
-                    <td className="px-4 py-3.5 font-semibold text-gray-700">
+                    <td className="px-4 sm:px-6 py-3.5 text-gray-600 font-normal">
                       <div className="flex items-center gap-2">
                         <BookOpen className="w-3.5 h-3.5 text-gray-400 shrink-0" />
-                        <span className="truncate max-w-[220px]">
+                        <span className="truncate max-w-[150px] sm:max-w-[220px]">
                           {isAr ? cert.course_title_ar || cert.course_title : cert.course_title}
                         </span>
                       </div>
                     </td>
 
                     {/* Code */}
-                    <td className="px-4 py-3.5">
+                    <td className="px-4 sm:px-6 py-3.5">
                       <span className="inline-flex items-center gap-1 font-mono text-[11px] font-bold text-[#009688] bg-[#009688]/10 px-2.5 py-0.5 rounded-md">
                         {cert.certificate_code}
                       </span>
                     </td>
 
                     {/* Issue Date */}
-                    <td className="px-4 py-3.5 text-gray-500 text-xs font-semibold">
+                    <td className="px-4 sm:px-6 py-3.5 text-gray-400 text-xs font-normal">
                       <div className="flex items-center gap-1">
                         <Calendar className="w-3.5 h-3.5 text-gray-400 shrink-0" />
                         <span>{cert.issue_date}</span>
@@ -200,14 +209,14 @@ export default function AdminCertificates() {
                     </td>
 
                     {/* View Certificate */}
-                    <td className="px-4 py-3.5 text-end">
+                    <td className="px-4 sm:px-6 py-3.5 text-end">
                       <Button
                         size="sm"
                         onClick={() => setSelectedCert(cert)}
                         className="bg-[#009688] hover:bg-[#00796b] text-white font-bold h-8 text-xs px-3 rounded-xl gap-1.5 shadow-xs"
                       >
                         <Eye className="w-3.5 h-3.5" />
-                        {isAr ? 'معاينة الشهادة' : 'Preview Certificate'}
+                        <span className="hidden sm:inline">{isAr ? 'معاينة الشهادة' : 'Preview'}</span>
                       </Button>
                     </td>
 

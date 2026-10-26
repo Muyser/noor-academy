@@ -100,7 +100,7 @@ export default function Languages() {
             {isAr ? 'لا توجد لغات متاحة حالياً.' : 'No languages available at the moment.'}
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 justify-items-center sm:justify-items-stretch">
             {filtered.map((item, i) => {
               const title = isAr ? item.name_ar || item.name : item.name;
               const description = isAr ? item.description_ar || item.description : item.description;
@@ -110,18 +110,18 @@ export default function Languages() {
               return (
                 <div
                   key={item.id || item._id || i}
-                  className={`relative overflow-hidden bg-white/95 backdrop-blur-md rounded-3xl border ${
+                  className={`w-full max-w-[285px] sm:max-w-none relative overflow-hidden bg-white/95 backdrop-blur-md rounded-3xl border ${
                     isPrimary ? 'border-[#009688]/40 shadow-lg shadow-[#009688]/5' : 'border-gray-100/80 shadow-sm'
-                  } p-8 flex flex-col justify-between hover:shadow-xl transition-all duration-300 group`}
+                  } p-5 sm:p-8 flex flex-col justify-between hover:shadow-xl transition-all duration-300 group`}
                 >
                   {/* Soft Mint Corner Blob inside card */}
                   <div className="absolute -top-10 -left-10 w-36 h-36 bg-[#e8f7f4] rounded-full blur-2xl pointer-events-none" />
 
                   <div>
                     {/* Top Icon Box */}
-                    <div className="flex justify-start mb-6">
+                    <div className="flex justify-start mb-4 sm:mb-6">
                       <div
-                        className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-sm ${
+                        className={`w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center text-lg sm:text-xl shadow-sm ${
                           isPrimary
                             ? 'bg-[#009688] text-white'
                             : 'bg-[#e3f6f3] text-[#009688]'
@@ -132,12 +132,12 @@ export default function Languages() {
                     </div>
 
                     {/* Card Title */}
-                    <h3 className="text-2xl font-extrabold text-[#112d27] mb-3">
+                    <h3 className="text-xl sm:text-2xl font-extrabold text-[#112d27] mb-2 sm:mb-3">
                       {title}
                     </h3>
 
                     {/* Card Description */}
-                    <p className="text-sm text-gray-500 font-medium leading-relaxed mb-8">
+                    <p className="text-xs sm:text-sm text-gray-500 font-medium leading-relaxed mb-6 sm:mb-8">
                       {description}
                     </p>
                   </div>
@@ -146,7 +146,7 @@ export default function Languages() {
                   <div className="pt-2">
                     <a
                       href={`/courses?language=${item.slug || 'all'}`}
-                      className="inline-flex items-center text-sm font-bold text-[#009688] hover:text-[#00796b] transition-colors gap-1 border-b-2 border-[#009688]/30 pb-0.5 group-hover:border-[#009688]"
+                      className="inline-flex items-center text-xs sm:text-sm font-bold text-[#009688] hover:text-[#00796b] transition-colors gap-1 border-b-2 border-[#009688]/30 pb-0.5 group-hover:border-[#009688]"
                     >
                       {isAr ? `استكشف ${title} ←` : `Explore ${title} →`}
                     </a>

@@ -37,7 +37,6 @@ export default function AdminDashboard() {
 
       if (data.stats) setStats(data.stats);
       if (data.recentEnrollments) {
-        // Format populated fields for seamless rendering
         const formatted = data.recentEnrollments.map((enr) => ({
           id: enr._id,
           student_name: enr.student?.full_name || enr.student?.name || enr.student?.email || 'Student User',
@@ -96,46 +95,46 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className={`space-y-6 ${isAr ? 'dir-rtl' : 'dir-ltr'}`}>
+    <div className={`max-w-6xl mx-auto space-y-6 px-3 sm:px-0 ${isAr ? 'dir-rtl' : 'dir-ltr'}`}>
       
       {/* Welcome Banner */}
-      <div>
-        <h1 className="text-2xl font-extrabold text-[#112d27]">
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-gray-100 p-5 sm:p-6 shadow-sm">
+        <h1 className="text-xl sm:text-2xl font-bold text-[#112d27] tracking-tight">
           {isAr ? 'مرحباً بك في لوحة الإدارة' : t('admin.welcome') || 'Welcome Back, Admin'}
         </h1>
-        <p className="text-xs sm:text-sm font-medium text-gray-500 mt-1">
+        <p className="text-xs sm:text-sm font-normal text-gray-500 mt-1">
           {isAr ? 'نظرة عامة على أداء منصة أكاديمية نور برو ومتابعة نشاط الطلاب.' : t('admin.welcomeDesc') || 'Overview of Noor Pro Academy performance and student activity.'}
         </p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Stats Cards (Fully Responsive Grid) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {cards.map((card, i) => (
           <div
             key={i}
-            className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:shadow-md transition-all"
+            className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5 shadow-sm hover:shadow-md transition-all"
           >
-            <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center mb-3', card.bg)}>
-              <card.icon className={cn('w-5 h-5', card.color)} />
+            <div className={cn('w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center mb-3', card.bg)}>
+              <card.icon className={cn('w-4 h-4 sm:w-5 sm:h-5', card.color)} />
             </div>
             {loading ? (
               <div className="h-7 w-12 bg-gray-100 rounded animate-pulse" />
             ) : (
-              <div className="text-2xl font-extrabold text-[#112d27]">{card.value}</div>
+              <div className="text-xl sm:text-2xl font-bold text-[#112d27]">{card.value}</div>
             )}
-            <div className="text-xs font-semibold text-gray-500 mt-0.5">{card.label}</div>
+            <div className="text-[11px] sm:text-xs font-normal text-gray-500 mt-0.5 truncate">{card.label}</div>
           </div>
         ))}
       </div>
 
       {/* Recent Enrollments Card */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-5 sm:p-6 shadow-sm">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-extrabold text-[#112d27] text-base">
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-gray-100 p-4 sm:p-6 shadow-sm">
+        <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-50">
+          <h2 className="font-bold text-[#112d27] text-sm sm:text-base">
             {isAr ? 'أحدث التسجيلات' : t('admin.recentEnrollments') || 'Recent Enrollments'}
           </h2>
           <span className="text-xs text-[#009688] font-bold">
-            {recentEnrollments.length} {isAr ? 'تسجيلات حديثة' : 'recent'}
+            {recentEnrollments.length} {isAr ? 'حديثة' : 'recent'}
           </span>
         </div>
 
@@ -144,7 +143,7 @@ export default function AdminDashboard() {
             <div className="w-6 h-6 border-2 border-[#009688] border-t-transparent rounded-full animate-spin mx-auto" />
           </div>
         ) : recentEnrollments.length === 0 ? (
-          <p className="text-xs text-gray-400 font-medium py-6 text-center">
+          <p className="text-xs text-gray-400 font-normal py-6 text-center">
             {isAr ? 'لا توجد بيانات متاحة حالياً.' : t('admin.noData') || 'No recent enrollments available.'}
           </p>
         ) : (
@@ -156,21 +155,21 @@ export default function AdminDashboard() {
               return (
                 <div
                   key={enr.id}
-                  className="flex items-center justify-between p-3.5 rounded-xl bg-[#f8fcfb] border border-gray-100"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3 sm:p-3.5 rounded-xl bg-[#f8fcfb] border border-gray-100"
                 >
                   <div className="min-w-0 flex-1">
                     <div className="font-bold text-[#112d27] text-xs sm:text-sm truncate">
                       {enr.student_name || 'Student'}
                     </div>
-                    <div className="text-xs text-gray-400 font-medium truncate mt-0.5">
+                    <div className="text-[11px] sm:text-xs text-gray-500 font-normal truncate mt-0.5">
                       {courseTitle}
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 shrink-0 ms-3">
+                  <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-1 sm:pt-0 border-t sm:border-0 border-gray-100">
                     <span
                       className={cn(
-                        'px-2 py-0.5 rounded-md text-[10px] font-extrabold flex items-center gap-1',
+                        'px-2 py-0.5 rounded-md text-[10px] font-bold flex items-center gap-1',
                         isCompleted
                           ? 'bg-green-50 text-green-700 border border-green-200'
                           : 'bg-[#009688]/10 text-[#009688]'
@@ -180,7 +179,7 @@ export default function AdminDashboard() {
                       {isCompleted ? (isAr ? 'مكتمل' : 'Completed') : (isAr ? 'نشط' : 'Active')}
                     </span>
 
-                    <span className="text-[11px] font-semibold text-gray-400 hidden sm:inline">
+                    <span className="text-[10px] sm:text-[11px] font-normal text-gray-400">
                       {enr.enrolled_date ? enr.enrolled_date.split('T')[0] : '—'}
                     </span>
                   </div>

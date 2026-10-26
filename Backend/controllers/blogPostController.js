@@ -1,7 +1,7 @@
-import cloudinary from '../config/cloudinary.js'; // Adjust relative path to your file
+import cloudinary from '../config/cloudinary.js';
 import BlogPost from '../models/BlogPost.js';
 
-// Helper to stream buffer to Cloudinary using your imported instance
+// Helper to stream buffer to Cloudinary
 const uploadToCloudinary = (buffer) => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
@@ -13,17 +13,6 @@ const uploadToCloudinary = (buffer) => {
     );
     stream.end(buffer);
   });
-};
-
-// Helper to generate clean URL slug from title
-const generateSlug = (text) => {
-  return text
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, '-')       // Replace spaces with -
-    .replace(/[^\w\-]+/g, '')   // Remove non-word chars
-    .replace(/\-\-+/g, '-');      // Replace multiple - with single -
 };
 
 // @desc    Get all blog posts
@@ -38,7 +27,6 @@ export const getBlogPosts = async (req, res) => {
       id: post._id,
       title: post.title,
       title_ar: post.title_ar,
-      slug: post.slug,
       category: post.category,
       author: post.author,
       cover_image: post.cover_image,
@@ -71,7 +59,6 @@ export const getBlogPostById = async (req, res) => {
       id: post._id,
       title: post.title,
       title_ar: post.title_ar,
-      slug: post.slug,
       category: post.category,
       author: post.author,
       cover_image: post.cover_image,
@@ -96,7 +83,6 @@ export const createBlogPost = async (req, res) => {
     const {
       title,
       title_ar,
-      slug,
       category,
       author,
       excerpt,
@@ -112,24 +98,15 @@ export const createBlogPost = async (req, res) => {
       return res.status(400).json({ message: 'Article title is required' });
     }
 
-    const finalSlug = slug ? slug.trim().toLowerCase() : generateSlug(title);
-
-    const existingPost = await BlogPost.findOne({ slug: finalSlug });
-    if (existingPost) {
-      return res.status(400).json({ message: 'A blog post with this slug already exists' });
-    }
-
     if (!req.file) {
       return res.status(400).json({ message: 'Cover image file is required' });
     }
 
-    // Upload cover image buffer to Cloudinary
     const coverImageUrl = await uploadToCloudinary(req.file.buffer);
 
     const post = await BlogPost.create({
       title: title.trim(),
       title_ar: title_ar ? title_ar.trim() : '',
-      slug: finalSlug,
       category: category ? category.trim() : 'Learning',
       author: author ? author.trim() : 'Noor Pro Academy',
       cover_image: coverImageUrl,
@@ -146,7 +123,6 @@ export const createBlogPost = async (req, res) => {
       id: post._id,
       title: post.title,
       title_ar: post.title_ar,
-      slug: post.slug,
       category: post.category,
       author: post.author,
       cover_image: post.cover_image,
@@ -175,11 +151,6 @@ export const updateBlogPost = async (req, res) => {
 
     post.title = req.body.title ? req.body.title.trim() : post.title;
     post.title_ar = req.body.title_ar !== undefined ? req.body.title_ar : post.title_ar;
-    
-    if (req.body.slug) {
-      post.slug = req.body.slug.trim().toLowerCase();
-    }
-
     post.category = req.body.category !== undefined ? req.body.category : post.category;
     post.author = req.body.author !== undefined ? req.body.author : post.author;
     
@@ -201,7 +172,6 @@ export const updateBlogPost = async (req, res) => {
       id: updated._id,
       title: updated.title,
       title_ar: updated.title_ar,
-      slug: updated.slug,
       category: updated.category,
       author: updated.author,
       cover_image: updated.cover_image,

@@ -55,14 +55,14 @@ export default function Languages() {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-[#009688]/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="container-page max-w-3xl mx-auto px-4 relative z-10">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#112d27] tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-[#112d27] tracking-tight leading-tight">
             {isAr ? 'اكتشف لغات العالم.' : 'Explore Languages.'}
-            <span className="block text-[#009688] font-black mt-1">
+            <span className="block text-[#009688] font-bold mt-1">
               {isAr ? 'ابدأ رحلة تعلمك اليوم.' : 'Start your journey today.'}
             </span>
           </h1>
 
-          <p className="mt-3 text-gray-500 text-xs sm:text-sm font-medium max-w-xl mx-auto leading-relaxed">
+          <p className="mt-3 text-gray-500 text-xs sm:text-sm font-normal max-w-xl mx-auto leading-relaxed">
             {isAr
               ? 'تصفح اللغات المتاحة في الأكاديمية وابحث عن مسارك التعليمي المناسب لتحقيق طموحاتك.'
               : 'Browse available languages in the academy and find your ideal learning pathway.'}
@@ -81,7 +81,7 @@ export default function Languages() {
                     ? 'ابحث عن لغة أو اختصاص...'
                     : 'Search for a language or skill...'
                 }
-                className="w-full bg-transparent text-xs sm:text-sm font-medium text-gray-700 outline-none placeholder:text-gray-400 px-1"
+                className="w-full bg-transparent text-xs sm:text-sm font-normal text-gray-700 outline-none placeholder:text-gray-400 px-1"
               />
               <button className="bg-[#009688] hover:bg-[#00796b] text-white px-5 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-[#009688]/20 transition-all duration-300 shrink-0">
                 {isAr ? 'بحث' : 'Search'}
@@ -104,7 +104,7 @@ export default function Languages() {
               {isAr ? 'لا توجد لغات متاحة حالياً.' : 'No languages available at the moment.'}
             </div>
           ) : (
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 justify-items-center sm:justify-items-stretch">
               {filtered.map((item) => {
                 const itemId = item._id || item.id;
                 const langName = isAr ? item.name_ar || item.name : item.name;
@@ -114,63 +114,66 @@ export default function Languages() {
                 return (
                   <div
                     key={itemId}
-                    className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col justify-between"
+                    className="w-full max-w-[285px] sm:max-w-none flex flex-col group relative bg-white/95 backdrop-blur-md rounded-3xl border border-gray-100/80 p-4 sm:p-5 shadow-sm hover:shadow-xl transition-all duration-300 justify-between"
                   >
                     <div>
-                      {/* Card Banner Image */}
-                      <div className="relative h-36 overflow-hidden bg-gray-100">
+                      {/* Top Image + Badge */}
+                      <div className="relative w-full h-40 sm:h-48 rounded-2xl overflow-hidden bg-gray-100 mb-3 sm:mb-4">
                         {item.image ? (
                           <img
                             src={item.image}
                             alt={langName}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-[#009688]/10 text-[#009688] font-black">
-                            {langName}
+                          <div className="w-full h-full flex items-center justify-center bg-[#009688]/10 text-[#009688] font-bold text-2xl">
+                            {langName.charAt(0)}
                           </div>
                         )}
                         
-                        <div className="absolute top-2.5 left-2.5 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-extrabold text-[#009688] shadow-sm flex items-center gap-1">
-                          <Globe2 className="w-3 h-3" />
-                          <span>{item.courses_count || 4} {isAr ? 'دورات' : 'courses'}</span>
+                        <div className="absolute top-3 start-3 z-10">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:py-1 rounded-xl text-[11px] sm:text-xs font-bold shadow-sm backdrop-blur-md bg-[#009688]/90 text-white">
+                            <Globe2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                            {item.courses_count || 4} {isAr ? 'دورات' : 'courses'}
+                          </span>
                         </div>
                       </div>
 
-                      {/* Card Content */}
-                      <div className="p-4">
-                        <h3 className="text-sm font-extrabold text-[#112d27] mb-1.5 leading-snug">
+                      {/* Content Details */}
+                      <div>
+                        <div className="flex items-center justify-between text-[11px] sm:text-xs text-gray-400 font-bold mb-1.5 sm:mb-2">
+                          <span className="text-[#009688] capitalize">{isAr ? 'مسار لغوي' : 'Language Path'}</span>
+                          <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded-md">
+                            👥 {item.learners_count || '1,000+'}
+                          </span>
+                        </div>
+
+                        <h3 className="text-base sm:text-lg font-bold text-[#112d27] mb-1.5 sm:mb-2 line-clamp-1">
                           {langName}
                         </h3>
 
                         {langDesc && (
-                          <p className="text-[11px] text-gray-500 font-medium leading-relaxed line-clamp-2 mb-3">
+                          <p className="text-[11px] sm:text-xs text-gray-500 font-normal line-clamp-2 mb-3 sm:mb-4 leading-relaxed">
                             {langDesc}
                           </p>
                         )}
-
-                        <div className="flex items-center gap-2 text-[10px] font-semibold text-gray-400 mb-2">
-                          <span className="flex items-center gap-1">
-                            👥 {item.learners_count || '1,000+' } {isAr ? 'متعلم' : 'learners'}
-                          </span>
-                        </div>
                       </div>
                     </div>
 
-                    {/* Card Footer */}
-                    <div className="px-4 pb-4 pt-0 flex items-center justify-between border-t border-gray-50 mt-auto">
-                      <span className="text-[11px] text-gray-400 font-medium">
-                        {isAr ? 'مسار تعليمي' : 'Language Path'}
+                    {/* Bottom Action Link */}
+                    <div className="pt-2.5 sm:pt-3 border-t border-gray-100 flex items-center justify-between">
+                      <span className="text-[11px] sm:text-xs font-normal text-gray-400">
+                        {isAr ? 'أكاديمية نور' : 'Noor Academy'}
                       </span>
-
                       <Link
                         to={`/courses?lang=${langSlug}`}
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#e3f6f3] hover:bg-[#009688] text-[#009688] hover:text-white text-[11px] font-bold transition-all duration-300"
+                        className="inline-flex items-center gap-1 text-[11px] sm:text-xs font-bold text-[#009688] hover:text-[#00796b] transition-colors"
                       >
                         <span>{isAr ? 'عرض الدورات' : 'View Courses'}</span>
                         <span className="text-xs">{isRTL ? '←' : '→'}</span>
                       </Link>
                     </div>
+
                   </div>
                 );
               })}

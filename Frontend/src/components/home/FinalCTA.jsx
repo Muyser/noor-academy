@@ -27,7 +27,7 @@ export default function FinalCTA() {
 
           {/* Card Content */}
           <div className="relative z-10 max-w-lg mx-auto">
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-white leading-[1.25] text-balance mb-3">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white leading-[1.25] text-balance mb-3">
               {heading.split('\n').map((line, i) => (
                 <span key={i} className="block">
                   {line}
@@ -35,13 +35,13 @@ export default function FinalCTA() {
               ))}
             </h2>
 
-            <p className="text-teal-100/80 text-xs sm:text-sm font-medium max-w-md mx-auto mb-6 leading-relaxed">
+            <p className="text-teal-100/80 text-xs sm:text-sm font-normal max-w-md mx-auto mb-6 leading-relaxed">
               {desc}
             </p>
 
             <div>
               <Link to="/languages">
-                <Button size="lg" className="bg-[#009688] hover:bg-[#00796b] text-white px-7 py-5 rounded-xl font-bold text-sm shadow-md shadow-[#009688]/30 transition-all duration-300 border-none inline-flex items-center gap-2">
+                <Button size="lg" className="bg-[#009688] hover:bg-[#00796b] text-white px-7 py-5 rounded-xl font-bold text-xs sm:text-sm shadow-md shadow-[#009688]/30 transition-all duration-300 border-none inline-flex items-center gap-2">
                   <span>{t('cta.button') || (lang === 'ar' ? 'استكشف لغتك' : 'Explore Your Language')}</span>
                   {isRTL ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
                 </Button>

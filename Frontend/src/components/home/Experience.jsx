@@ -1,5 +1,5 @@
-import { Monitor, MessageSquareText, TrendingUp, Check } from 'lucide-react';
-import SectionHeading from '@/components/SectionHeading';
+import { MessageSquareText, TrendingUp, Check } from 'lucide-react';
+// import SectionHeading from '@/components/SectionHeading';
 import { useI18n } from '@/lib/useI18n';
 
 export default function Experience() {
@@ -34,33 +34,33 @@ export default function Experience() {
           
           {/* Left Side: Interactive Quiz Card Preview matching the screenshot */}
           <div className="lg:col-span-6 order-2 lg:order-1">
-            <div className="relative bg-[#0d1f1b] rounded-3xl p-6 sm:p-8 shadow-2xl border border-[#009688]/20 max-w-lg mx-auto overflow-hidden">
+            <div className="relative bg-[#0d1f1b] rounded-3xl p-5 sm:p-8 shadow-2xl border border-[#009688]/20 max-w-[285px] sm:max-w-lg mx-auto overflow-hidden">
               {/* Subtle card internal glow */}
               <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-[#009688]/20 rounded-full blur-3xl pointer-events-none" />
               
-              <div className="flex items-center justify-between mb-6 border-b border-white/10 pb-4">
-                <span className="text-xs font-bold text-gray-400">اختبار سريع في الإنجليزية</span>
-                <span className="w-7 h-7 rounded-xl bg-white/10 text-white flex items-center justify-center text-xs">?</span>
+              <div className="flex items-center justify-between mb-5 sm:mb-6 border-b border-white/10 pb-3 sm:pb-4">
+                <span className="text-[11px] sm:text-xs font-bold text-gray-400">اختبار سريع في الإنجليزية</span>
+                <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-xl bg-white/10 text-white flex items-center justify-center text-xs">?</span>
               </div>
 
-              <div className="text-center my-8">
-                <p className="text-lg sm:text-xl font-bold text-white tracking-wide">
+              <div className="text-center my-6 sm:my-8">
+                <p className="text-base sm:text-xl font-bold text-white tracking-wide">
                   ".I have lived here <span className="underline decoration-[#009688] underline-offset-8 px-2">____</span> 2022"
                 </p>
-                <span className="block text-xs text-gray-400 mt-3">اختر الإجابة الصحيحة</span>
+                <span className="block text-[11px] sm:text-xs text-gray-400 mt-2.5 sm:mt-3">اختر الإجابة الصحيحة</span>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 mt-6">
-                <div className="bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-3 text-center text-white text-sm font-medium transition-all cursor-pointer">
+              <div className="grid grid-cols-2 gap-2.5 sm:gap-3 mt-5 sm:mt-6">
+                <div className="bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-2.5 sm:p-3 text-center text-white text-xs sm:text-sm font-medium transition-all cursor-pointer">
                   since
                 </div>
-                <div className="bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-3 text-center text-white text-sm font-medium transition-all cursor-pointer">
+                <div className="bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-2.5 sm:p-3 text-center text-white text-xs sm:text-sm font-medium transition-all cursor-pointer">
                   for
                 </div>
-                <div className="bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-3 text-center text-white text-sm font-medium transition-all cursor-pointer">
+                <div className="bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-2.5 sm:p-3 text-center text-white text-xs sm:text-sm font-medium transition-all cursor-pointer">
                   from
                 </div>
-                <div className="bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-3 text-center text-white text-sm font-medium transition-all cursor-pointer">
+                <div className="bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-2.5 sm:p-3 text-center text-white text-xs sm:text-sm font-medium transition-all cursor-pointer">
                   during
                 </div>
               </div>

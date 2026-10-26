@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 const API_URL = import.meta.env.VITE_API_URL || '';
 
 export default function Courses() {
-  const { lang } = useI18n();
+  const { lang, isRTL } = useI18n();
   const isAr = lang === 'ar';
   const [searchParams] = useSearchParams();
 
@@ -84,14 +84,14 @@ export default function Courses() {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-[#009688]/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="container-page max-w-3xl mx-auto px-4 relative z-10">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#112d27] tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-[#112d27] tracking-tight leading-tight">
             {isAr ? 'تعلّم لغة.' : 'Learn a language.'}
-            <span className="block text-[#009688] font-black mt-1">
+            <span className="block text-[#009688] font-bold mt-1">
               {isAr ? 'ابنِ مستقبلك.' : 'Build your future.'}
             </span>
           </h1>
 
-          <p className="mt-3 text-gray-500 text-xs sm:text-sm font-medium max-w-xl mx-auto leading-relaxed">
+          <p className="mt-3 text-gray-500 text-xs sm:text-sm font-normal max-w-xl mx-auto leading-relaxed">
             {isAr
               ? 'استكشف دورات لغوية منظمة مصممة لمساعدتك على التواصل بثقة، أونلاين أو حضورياً.'
               : 'Explore structured online and in-person language courses designed to help you communicate confidently.'}
@@ -110,7 +110,7 @@ export default function Courses() {
                     ? 'ابحث عن دورة، لغة، أو مهارة...'
                     : 'Search for a course, language or skill...'
                 }
-                className="w-full bg-transparent text-xs sm:text-sm font-medium text-gray-700 outline-none placeholder:text-gray-400 px-1"
+                className="w-full bg-transparent text-xs sm:text-sm font-normal text-gray-700 outline-none placeholder:text-gray-400 px-1"
               />
               <button className="bg-[#009688] hover:bg-[#00796b] text-white px-5 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-[#009688]/20 transition-all duration-300 shrink-0">
                 {isAr ? 'بحث' : 'Search'}
@@ -220,8 +220,8 @@ export default function Courses() {
               {isAr ? 'لا توجد دورات مطابقة لخيارات البحث.' : 'No courses found matching your criteria.'}
             </div>
           ) : (
-            /* Courses Grid - 4 Columns */
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            /* Courses Grid - Matching the compact FeaturedCourses card sizing */
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 justify-items-center sm:justify-items-stretch">
               {filtered.map((course) => {
                 const courseId = course.id || course._id;
                 const isOffline = course.modality === 'offline';
@@ -230,42 +230,42 @@ export default function Courses() {
                 return (
                   <div
                     key={courseId}
-                    className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col justify-between"
+                    className="w-full max-w-[285px] sm:max-w-none flex flex-col group relative bg-white/95 backdrop-blur-md rounded-3xl border border-gray-100/80 p-4 sm:p-5 shadow-sm hover:shadow-xl transition-all duration-300 justify-between"
                   >
                     <div>
                       {/* Banner Image & Modality Badge */}
-                      <div className="relative h-36 overflow-hidden bg-gray-100">
+                      <div className="relative w-full h-40 sm:h-44 rounded-2xl overflow-hidden bg-gray-100 mb-3 sm:mb-4">
                         {course.image ? (
                           <img
                             src={course.image}
                             alt={course.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-[#009688]/10 text-[#009688] font-black text-xl">
+                          <div className="w-full h-full flex items-center justify-center bg-[#009688]/10 text-[#009688] font-bold text-xl">
                             {course.title ? course.title.charAt(0) : 'C'}
                           </div>
                         )}
                         
                         {/* Modality Badge (Online/Offline) */}
-                        <div className="absolute top-2.5 left-2.5 z-10">
+                        <div className="absolute top-3 start-3 z-10">
                           <span className={cn(
-                            'inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black text-white shadow-xs backdrop-blur-md',
+                            'inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:py-1 rounded-xl text-[11px] sm:text-xs font-bold text-white shadow-sm backdrop-blur-md',
                             isOffline ? 'bg-purple-600/90' : 'bg-[#009688]/90'
                           )}>
-                            {isOffline ? <MapPin className="w-3 h-3" /> : <Video className="w-3 h-3" />}
+                            {isOffline ? <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> : <Video className="w-3 h-3 sm:w-3.5 sm:h-3.5" />}
                             {isOffline ? (isAr ? 'حضوري' : 'Offline') : (isAr ? 'أونلاين' : 'Online')}
                           </span>
                         </div>
 
                         {/* Level Badge Tag */}
-                        <div className="absolute top-2.5 right-2.5 bg-white/90 backdrop-blur-md px-2 py-0.5 rounded-md text-[10px] font-extrabold text-gray-800 shadow-xs">
+                        <div className="absolute top-3 end-3 bg-white/90 backdrop-blur-md px-2 py-0.5 rounded-lg text-[10px] font-bold text-gray-800 shadow-xs">
                           {course.level || 'A1 → B1'}
                         </div>
                       </div>
 
                       {/* Card Body */}
-                      <div className="p-4">
+                      <div>
                         <div className="flex items-center justify-between text-[11px] font-bold mb-1.5">
                           <span className="text-[#009688] uppercase tracking-wider">
                             {course.category || 'General'}
@@ -277,28 +277,28 @@ export default function Courses() {
                         </div>
 
                         {/* Title */}
-                        <h3 className="text-sm font-extrabold text-[#112d27] mb-1.5 leading-snug line-clamp-1">
+                        <h3 className="text-sm sm:text-base font-bold text-[#112d27] mb-1.5 leading-snug line-clamp-1">
                           {isAr ? course.title_ar || course.title : course.title}
                         </h3>
 
                         {/* Description */}
-                        <p className="text-[11px] text-gray-500 font-medium leading-relaxed line-clamp-2 mb-3">
+                        <p className="text-[11px] sm:text-xs text-gray-500 font-normal leading-relaxed line-clamp-2 mb-3">
                           {course.short_description || course.description || (isAr ? 'استكشف هذه الدورة وابدأ في بناء مهاراتك.' : 'Build your language skills with active practical training.')}
                         </p>
 
                         {/* Same Line: Price & Honors Pill */}
-                        <div className="flex items-center justify-between gap-2 mb-2">
-                          <span className="text-base font-black text-[#112d27]">
+                        <div className="flex items-center justify-between gap-2 mb-3">
+                          <span className="text-base sm:text-lg font-bold text-[#112d27]">
                             ${course.price || 0}
                           </span>
 
                           {firstHonor ? (
-                            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-800 bg-amber-50 border border-amber-200/80 px-2 py-0.5 rounded-lg truncate max-w-[130px]">
+                            <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200/80 px-2 py-0.5 rounded-xl truncate max-w-[130px]">
                               <Award className="w-3 h-3 text-amber-600 shrink-0" />
                               <span className="truncate">{firstHonor}</span>
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-lg">
+                            <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-xl">
                               <Award className="w-3 h-3 text-emerald-600 shrink-0" />
                               <span>{isAr ? 'شهادة' : 'Honors'}</span>
                             </span>
@@ -308,14 +308,14 @@ export default function Courses() {
                     </div>
 
                     {/* Card Footer */}
-                    <div className="px-4 pb-4 pt-0 flex items-center justify-between border-t border-gray-50 mt-auto">
-                      <span className="text-[10px] font-semibold text-gray-400 truncate max-w-[120px]">
+                    <div className="pt-2.5 sm:pt-3 border-t border-gray-100 flex items-center justify-between mt-auto">
+                      <span className="text-[11px] font-normal text-gray-400 truncate max-w-[120px]">
                         {course.instructor || 'Prof. Ahmed Nour'}
                       </span>
 
                       <Link
                         to={`/courses/${courseId}`}
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#e3f6f3] hover:bg-[#009688] text-[#009688] hover:text-white text-[11px] font-bold transition-all duration-300"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#e3f6f3] hover:bg-[#009688] text-[#009688] hover:text-white text-[11px] font-bold transition-all duration-300"
                       >
                         <span>{isAr ? 'التفاصيل' : 'View'}</span>
                         <span className="text-xs">{isAr ? '←' : '→'}</span>

@@ -186,52 +186,52 @@ export default function AdminGallery() {
   };
 
   return (
-    <div className={`space-y-6 ${isAr ? 'dir-rtl' : 'dir-ltr'}`}>
+    <div className={`max-w-6xl mx-auto space-y-6 px-3 sm:px-0 ${isAr ? 'dir-rtl' : 'dir-ltr'}`}>
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white rounded-2xl sm:rounded-3xl border border-gray-100 p-5 sm:p-6 shadow-sm">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-[#112d27]">
+          <h1 className="text-xl sm:text-2xl font-bold text-[#112d27] tracking-tight">
             {isAr ? 'إدارة معرض الصور والفيديو' : 'Gallery Management'}
           </h1>
-          <p className="text-xs text-gray-500 font-medium mt-0.5">
+          <p className="text-xs sm:text-sm font-normal text-gray-500 mt-1">
             {isAr ? 'إضافة وتعديل وحذف صور وفيديوهات الأنشطة والفعاليات في الأكاديمية.' : 'Add, edit, and manage academy photos and videos.'}
           </p>
         </div>
         <Button
           onClick={() => handleOpenModal()}
-          className="bg-[#009688] hover:bg-[#00796b] text-white font-bold rounded-xl gap-2 shadow-sm"
+          className="bg-[#009688] hover:bg-[#00796b] text-white font-bold rounded-xl h-10 text-xs gap-1.5 shrink-0 shadow-md shadow-[#009688]/15"
         >
           <Plus className="w-4 h-4" />
-          {isAr ? 'إضافة وسائط جديدة' : 'Add New Media'}
+          <span>{isAr ? 'إضافة وسائط جديدة' : 'Add New Media'}</span>
         </Button>
       </div>
 
       {/* Gallery Grid */}
       {loading ? (
         <div className="flex justify-center py-20">
-          <Loader2 className="w-8 h-8 text-[#009688] animate-spin" />
+          <Loader2 className="w-6 h-6 text-[#009688] animate-spin" />
         </div>
       ) : items.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
+        <div className="bg-white rounded-2xl sm:rounded-3xl border border-gray-100 p-12 text-center shadow-sm">
           <ImageIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
           <h3 className="font-bold text-[#112d27] text-base mb-1">{isAr ? 'لا توجد عناصر حالياً' : 'No gallery items found'}</h3>
-          <p className="text-xs text-gray-400 mb-4">{isAr ? 'ابدأ بإضافة أول صورة أو فيديو للمعرض.' : 'Start by adding your first photo or video to the gallery.'}</p>
-          <Button onClick={() => handleOpenModal()} className="bg-[#009688] hover:bg-[#00796b] text-white font-bold rounded-xl text-xs">
+          <p className="text-xs text-gray-400 font-normal mb-4">{isAr ? 'ابدأ بإضافة أول صورة أو فيديو للمعرض.' : 'Start by adding your first photo or video to the gallery.'}</p>
+          <Button onClick={() => handleOpenModal()} className="bg-[#009688] hover:bg-[#00796b] text-white font-bold rounded-xl h-10 text-xs px-5">
             {isAr ? 'إضافة وسائط' : 'Add Media'}
           </Button>
         </div>
       ) : (
-        <div className="grid sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {items.map((item) => {
             const itemIsVideo = item.type === 'video' || item.image?.endsWith('.mp4');
 
             return (
-              <div key={item._id} className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm flex flex-col justify-between group">
+              <div key={item._id} className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm flex flex-col justify-between group">
                 <div 
                   onClick={() => itemIsVideo && setPlayingVideo(item)}
                   className={cn(
-                    "relative h-36 bg-gray-900 overflow-hidden flex items-center justify-center",
+                    "relative h-40 bg-gray-900 overflow-hidden flex items-center justify-center",
                     itemIsVideo && "cursor-pointer"
                   )}
                 >
@@ -248,16 +248,16 @@ export default function AdminGallery() {
                     <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                   )}
 
-                  <span className="absolute top-2 left-2 bg-white/90 backdrop-blur-md px-2 py-0.5 rounded-md text-[9px] font-extrabold text-[#009688] uppercase shadow-sm">
+                  <span className="absolute top-2 left-2 bg-white/90 backdrop-blur-md px-2 py-0.5 rounded-md text-[9px] font-bold text-[#009688] uppercase shadow-sm">
                     {item.category}
                   </span>
                 </div>
 
-                <div className="p-3 flex flex-col flex-grow">
+                <div className="p-3.5 flex flex-col flex-grow">
                   <h3 className="font-bold text-[#112d27] text-xs mb-1 truncate">{item.title}</h3>
-                  {item.description && <p className="text-[11px] text-gray-500 line-clamp-2 mb-3">{item.description}</p>}
+                  {item.description && <p className="text-[11px] text-gray-500 font-normal line-clamp-2 mb-3">{item.description}</p>}
                   
-                  <div className="flex items-center justify-end gap-1.5 mt-auto pt-2 border-t border-gray-50">
+                  <div className="flex items-center justify-end gap-1.5 mt-auto pt-2.5 border-t border-gray-50">
                     <Button
                       size="sm"
                       variant="outline"
@@ -265,7 +265,7 @@ export default function AdminGallery() {
                       className="h-7 px-2.5 rounded-lg text-[11px] font-bold text-gray-600 hover:text-[#009688]"
                     >
                       <Edit2 className="w-3 h-3 me-1" />
-                      {isAr ? 'تعديل' : 'Edit'}
+                      <span>{isAr ? 'تعديل' : 'Edit'}</span>
                     </Button>
                     <Button
                       size="sm"
@@ -274,7 +274,7 @@ export default function AdminGallery() {
                       className="h-7 px-2.5 rounded-lg text-[11px] font-bold text-red-600 hover:bg-red-50 hover:border-red-200"
                     >
                       <Trash2 className="w-3 h-3 me-1" />
-                      {isAr ? 'حذف' : 'Delete'}
+                      <span>{isAr ? 'حذف' : 'Delete'}</span>
                     </Button>
                   </div>
                 </div>
@@ -289,7 +289,7 @@ export default function AdminGallery() {
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
           <div className="relative max-w-3xl w-full bg-black rounded-3xl overflow-hidden shadow-2xl border border-gray-800">
             <div className="flex items-center justify-between p-4 bg-gray-900 text-white border-b border-gray-800">
-              <h3 className="font-extrabold text-sm truncate">{playingVideo.title}</h3>
+              <h3 className="font-bold text-sm truncate">{playingVideo.title}</h3>
               <button onClick={() => setPlayingVideo(null)} className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white">
                 <X className="w-5 h-5" />
               </button>
@@ -303,10 +303,10 @@ export default function AdminGallery() {
 
       {/* Add/Edit Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-              <h2 className="font-extrabold text-[#112d27] text-base">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl border border-gray-100 max-w-lg w-full p-4 sm:p-6 space-y-4 shadow-xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-gray-100 sticky top-0 bg-white z-10">
+              <h2 className="font-bold text-[#112d27] text-base">
                 {editingItem ? (isAr ? 'تعديل عنصر المعرض' : 'Edit Gallery Item') : (isAr ? 'إضافة عنصر جديد للمعرض' : 'Add New Gallery Item')}
               </h2>
               <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600">
@@ -322,7 +322,7 @@ export default function AdminGallery() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder={isAr ? 'أدخل عنوان العنصر' : 'Enter title'}
-                  className="h-10 text-xs font-semibold rounded-xl"
+                  className="h-10 text-xs font-normal rounded-xl w-full"
                   required
                 />
               </div>
@@ -333,7 +333,7 @@ export default function AdminGallery() {
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full h-10 px-3 text-xs font-semibold rounded-xl border border-gray-200 bg-white focus:border-[#009688] focus:outline-none"
+                  className="w-full h-10 px-3 text-xs font-normal rounded-xl border border-gray-200 bg-white text-[#112d27] focus:border-[#009688] focus:outline-none"
                 >
                   {categories.map((cat) => (
                     <option key={cat.key} value={cat.key}>{cat.label}</option>
@@ -348,16 +348,16 @@ export default function AdminGallery() {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder={isAr ? 'أدخل وصفاً مختصراً (اختياري)' : 'Enter short description (optional)'}
-                  className="w-full h-20 p-3 text-xs font-semibold rounded-xl border border-gray-200 focus:border-[#009688] focus:outline-none resize-none"
+                  className="w-full h-20 p-3 text-xs font-normal rounded-xl border border-gray-200 focus:border-[#009688] focus:outline-none resize-none"
                 />
               </div>
 
               {/* Media File Upload */}
               <div className="space-y-1.5">
                 <Label className="text-xs font-bold text-[#112d27]">{isAr ? 'الملف (صورة أو فيديو)' : 'Media (Image or Video)'}</Label>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                   {mediaPreview && (
-                    <div className="w-20 h-20 rounded-xl overflow-hidden border border-gray-200 shrink-0 bg-black flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-xl overflow-hidden border border-gray-200 shrink-0 bg-black flex items-center justify-center">
                       {isVideo ? (
                         <video src={mediaPreview} className="w-full h-full object-cover" controls />
                       ) : (
@@ -365,12 +365,12 @@ export default function AdminGallery() {
                       )}
                     </div>
                   )}
-                  <label className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-gray-200 hover:border-[#009688] rounded-2xl p-4 cursor-pointer bg-gray-50/50 transition-all">
+                  <label className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-gray-200 hover:border-[#009688] rounded-2xl p-3 cursor-pointer bg-gray-50/50 transition-all">
                     <Upload className="w-5 h-5 text-gray-400 mb-1" />
                     <span className="text-[11px] font-bold text-gray-600">
                       {isAr ? 'اختر صورة أو ملف فيديو' : 'Upload image or video file'}
                     </span>
-                    <span className="text-[9px] text-gray-400 mt-0.5">MP4, WEBM, JPG, PNG, WEBP</span>
+                    <span className="text-[9px] text-gray-400 font-normal mt-0.5">MP4, WEBM, JPG, PNG, WEBP</span>
                     <input 
                       type="file" 
                       accept="image/*,video/*" 
@@ -382,22 +382,22 @@ export default function AdminGallery() {
               </div>
 
               {/* Submit Buttons */}
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-gray-100">
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-gray-100">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => setIsModalOpen(false)}
-                  className="rounded-xl text-xs font-bold"
+                  className="h-10 rounded-xl text-xs font-bold"
                 >
                   {isAr ? 'إلغاء' : 'Cancel'}
                 </Button>
                 <Button
                   type="submit"
                   disabled={submitting}
-                  className="bg-[#009688] hover:bg-[#00796b] text-white font-bold rounded-xl text-xs gap-2"
+                  className="bg-[#009688] hover:bg-[#00796b] text-white font-bold rounded-xl h-10 text-xs px-5 gap-2"
                 >
                   {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
-                  {editingItem ? (isAr ? 'تعديل' : 'Save Changes') : (isAr ? 'إضافة' : 'Upload Item')}
+                  <span>{editingItem ? (isAr ? 'تعديل' : 'Save Changes') : (isAr ? 'إضافة' : 'Upload Item')}</span>
                 </Button>
               </div>
             </form>
@@ -412,10 +412,10 @@ export default function AdminGallery() {
             <div className="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-2">
               <AlertTriangle className="w-6 h-6" />
             </div>
-            <h3 className="font-extrabold text-[#112d27] text-base">
+            <h3 className="font-bold text-[#112d27] text-base">
               {isAr ? 'حذف عنصر المعرض' : 'Delete Gallery Item'}
             </h3>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 font-normal">
               {isAr ? 'هل أنت متأكد من رغبتك في حذف هذا العنصر؟ لا يمكن التراجع عن هذا الإجراء.' : 'Are you sure you want to delete this item? This action cannot be undone.'}
             </p>
             <div className="flex items-center gap-3 pt-2">
@@ -434,7 +434,7 @@ export default function AdminGallery() {
                 className="flex-1 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold gap-2"
               >
                 {deleting && <Loader2 className="w-4 h-4 animate-spin" />}
-                {isAr ? 'حذف' : 'Delete'}
+                <span>{isAr ? 'حذف' : 'Delete'}</span>
               </Button>
             </div>
           </div>

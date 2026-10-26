@@ -38,22 +38,16 @@ export default function Hero() {
             </p>
             <div className="mt-7 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start animate-fade-up" style={{ animationDelay: '0.3s' }}>
               <Link to="/languages">
-                <Button size="lg" className="w-full sm:w-auto bg-brand-teal hover:bg-brand-teal-dark text-white shadow-soft gap-2">
+                <Button size="lg" className="w-140 sm:w-auto bg-brand-teal hover:bg-brand-teal-dark text-white shadow-soft gap-2">
                   {t('hero.exploreLanguages')}
                   <ArrowRight className={cn('w-4 h-4', isRTL && 'rotate-180')} />
                 </Button>
               </Link>
-              {/* <Link to="/level-test">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white gap-2">
-                  <Play className="w-4 h-4" />
-                  {t('hero.testYourLevel')}
-                </Button>
-              </Link> */}
             </div>
           </div>
 
           {/* Image */}
-          <div className="relative animate-fade-scale" style={{ animationDelay: '0.2s' }}>
+          <div className="relative max-w-[300px] sm:max-w-none mx-auto w-full animate-fade-scale" style={{ animationDelay: '0.2s' }}>
             <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-card-hover">
               <Image
                 src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1000&q=80"
@@ -62,21 +56,22 @@ export default function Hero() {
                 className="w-full h-full"
               />
             </div>
-            {/* Floating cards */}
-            <div className="absolute -bottom-4 -start-4 sm:-start-6 bg-white rounded-2xl shadow-card-hover p-4 flex items-center gap-3 animate-float" style={{ animationDelay: '0.5s' }}>
-              <div className="w-10 h-10 rounded-xl bg-brand-orange/10 flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-brand-orange" />
+            {/* Floating card - Active Learners */}
+            <div className="absolute -bottom-3 -start-3 sm:-bottom-4 sm:-start-6 bg-white rounded-2xl shadow-card-hover p-2.5 sm:p-4 flex items-center gap-2.5 sm:gap-3 animate-float" style={{ animationDelay: '0.5s' }}>
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-brand-orange/10 flex items-center justify-center shrink-0">
+                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-brand-orange" />
               </div>
               <div>
-                <div className="text-sm font-bold text-brand-ink">1,500+</div>
-                <div className="text-xs text-brand-muted">{lang === 'ar' ? 'متعلّم نشط' : 'Active Learners'}</div>
+                <div className="text-xs sm:text-sm font-bold text-brand-ink">1,500+</div>
+                <div className="text-[10px] sm:text-xs text-brand-muted">{lang === 'ar' ? 'متعلّم نشط' : 'Active Learners'}</div>
               </div>
             </div>
-            <div className="absolute -top-4 -end-4 sm:-end-6 bg-white rounded-2xl shadow-card-hover p-4 flex items-center gap-3 animate-float" style={{ animationDelay: '1s' }}>
-              <div className="w-10 h-10 rounded-xl bg-brand-teal/10 flex items-center justify-center text-lg">🌍</div>
+            {/* Floating card - Languages */}
+            <div className="absolute -top-3 -end-3 sm:-top-4 sm:-end-6 bg-white rounded-2xl shadow-card-hover p-2.5 sm:p-4 flex items-center gap-2.5 sm:gap-3 animate-float" style={{ animationDelay: '1s' }}>
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-brand-teal/10 flex items-center justify-center text-base sm:text-lg shrink-0">🌍</div>
               <div>
-                <div className="text-sm font-bold text-brand-ink">6+</div>
-                <div className="text-xs text-brand-muted">{lang === 'ar' ? 'لغات' : 'Languages'}</div>
+                <div className="text-xs sm:text-sm font-bold text-brand-ink">6+</div>
+                <div className="text-[10px] sm:text-xs text-brand-muted">{lang === 'ar' ? 'لغات' : 'Languages'}</div>
               </div>
             </div>
           </div>

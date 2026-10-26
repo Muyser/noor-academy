@@ -62,7 +62,7 @@ export default function Instructors() {
             {isAr ? 'لا يوجد مدربون حالياً.' : 'No instructors available at the moment.'}
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 justify-items-center sm:justify-items-stretch">
             {instructors.map((ins, i) => {
               const name = ins.name || ins.full_name;
               const role = isAr ? ins.role || ins.role_ar : ins.role_en || ins.role;
@@ -72,14 +72,14 @@ export default function Instructors() {
               return (
                 <div
                   key={ins.id || ins._id || i}
-                  className="relative overflow-hidden bg-white/95 backdrop-blur-md rounded-3xl border border-gray-100/80 p-6 flex flex-col items-center text-center shadow-sm hover:shadow-xl transition-all duration-300 group"
+                  className="w-full max-w-[285px] sm:max-w-none relative overflow-hidden bg-white/95 backdrop-blur-md rounded-3xl border border-gray-100/80 p-5 sm:p-6 flex flex-col items-center text-center shadow-sm hover:shadow-xl transition-all duration-300 group"
                 >
                   {/* Soft Mint Corner Blob inside card */}
                   <div className="absolute -top-10 -left-10 w-32 h-32 bg-[#e8f7f4] rounded-full blur-2xl pointer-events-none" />
 
                   {/* Circular Avatar Container with soft halo gradient */}
-                  <div className="relative mb-5 p-1 rounded-full bg-gradient-to-tr from-[#009688]/20 via-[#e3f6f3] to-white">
-                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-white shadow-md bg-gray-100 flex items-center justify-center">
+                  <div className="relative mb-4 sm:mb-5 p-1 rounded-full bg-gradient-to-tr from-[#009688]/20 via-[#e3f6f3] to-white">
+                    <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-white shadow-md bg-gray-100 flex items-center justify-center">
                       {avatarUrl ? (
                         <img
                           src={avatarUrl}
@@ -95,17 +95,17 @@ export default function Instructors() {
                   </div>
 
                   {/* Instructor Name */}
-                  <h3 className="text-xl font-extrabold text-[#112d27] mb-1">
+                  <h3 className="text-lg sm:text-xl font-extrabold text-[#112d27] mb-1">
                     {name}
                   </h3>
 
                   {/* Role Title */}
-                  <div className="text-xs font-bold text-[#009688] mb-3">
+                  <div className="text-[11px] sm:text-xs font-bold text-[#009688] mb-2.5 sm:mb-3">
                     {role}
                   </div>
 
                   {/* Description */}
-                  <p className="text-xs text-gray-500 font-medium leading-relaxed max-w-xs">
+                  <p className="text-[11px] sm:text-xs text-gray-500 font-medium leading-relaxed max-w-xs">
                     {description}
                   </p>
                 </div>

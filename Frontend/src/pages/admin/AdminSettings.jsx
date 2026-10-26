@@ -82,29 +82,29 @@ export default function AdminSettings() {
   };
 
   return (
-    <div className={`space-y-8 max-w-3xl ${isAr ? 'dir-rtl' : 'dir-ltr'}`}>
+    <div className={`max-w-4xl mx-auto space-y-6 px-3 sm:px-0 ${isAr ? 'dir-rtl' : 'dir-ltr'}`}>
       
-      {/* Title */}
-      <div>
-        <h1 className="text-xl sm:text-2xl font-extrabold text-[#112d27]">
+      {/* Header Bar */}
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-gray-100 p-5 sm:p-6 shadow-sm">
+        <h1 className="text-xl sm:text-2xl font-bold text-[#112d27] tracking-tight">
           {isAr ? 'إعدادات الحساب والمنصة' : 'Settings'}
         </h1>
-        <p className="text-xs sm:text-sm font-medium text-gray-500 mt-1">
+        <p className="text-xs sm:text-sm font-normal text-gray-500 mt-1">
           {isAr ? 'تغيير البريد الإلكتروني، كلمة السر، ومعلومات الموقع الأساسية.' : 'Change your admin email, password, and basic site details.'}
         </p>
       </div>
 
       {/* 1. Admin Security Section (Email & Password) */}
-      <div className="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm space-y-5">
-        <div className="flex items-center gap-2.5 pb-3 border-b border-gray-100">
-          <div className="w-8 h-8 rounded-xl bg-[#009688]/10 text-[#009688] flex items-center justify-center font-bold">
-            <KeyRound className="w-4 h-4" />
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-gray-100 p-5 sm:p-6 shadow-sm space-y-5">
+        <div className="flex items-center gap-3 pb-4 border-b border-gray-100">
+          <div className="w-10 h-10 rounded-xl bg-[#009688]/10 text-[#009688] flex items-center justify-center font-bold shrink-0">
+            <KeyRound className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-sm font-extrabold text-[#112d27]">
+            <h2 className="text-sm sm:text-base font-bold text-[#112d27]">
               {isAr ? 'بيانات حساب المشرف والأمان' : 'Admin Account & Credentials'}
             </h2>
-            <p className="text-[11px] text-gray-400 font-medium">
+            <p className="text-xs text-gray-400 font-normal mt-0.5">
               {isAr ? 'تحديث البريد الإلكتروني وكلمة السر الخاصة بك كمشرف.' : 'Update your personal email address and sign-in password.'}
             </p>
           </div>
@@ -123,7 +123,7 @@ export default function AdminSettings() {
                 <Input
                   value={adminName}
                   onChange={(e) => setAdminName(e.target.value)}
-                  className="ps-9 h-10 text-xs font-semibold rounded-xl"
+                  className="ps-9 h-10 text-xs sm:text-sm font-normal rounded-xl w-full border-gray-200 focus:border-[#009688]"
                   required
                 />
               </div>
@@ -140,7 +140,7 @@ export default function AdminSettings() {
                   type="email"
                   value={adminEmail}
                   onChange={(e) => setAdminEmail(e.target.value)}
-                  className="ps-9 h-10 text-xs font-semibold rounded-xl"
+                  className="ps-9 h-10 text-xs sm:text-sm font-normal rounded-xl w-full border-gray-200 focus:border-[#009688]"
                   required
                 />
               </div>
@@ -148,8 +148,8 @@ export default function AdminSettings() {
 
           </div>
 
-          <div className="pt-3 border-t border-gray-50 space-y-4">
-            <h3 className="text-xs font-extrabold text-[#112d27]">
+          <div className="pt-4 border-t border-gray-100 space-y-4">
+            <h3 className="text-xs font-bold text-[#112d27]">
               {isAr ? 'تغيير كلمة السر (اختياري)' : 'Change Password (Optional)'}
             </h3>
 
@@ -167,7 +167,7 @@ export default function AdminSettings() {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="ps-9 h-10 text-xs font-semibold rounded-xl"
+                    className="ps-9 h-10 text-xs sm:text-sm font-normal rounded-xl w-full border-gray-200 focus:border-[#009688]"
                   />
                 </div>
               </div>
@@ -184,7 +184,7 @@ export default function AdminSettings() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="ps-9 h-10 text-xs font-semibold rounded-xl"
+                    className="ps-9 h-10 text-xs sm:text-sm font-normal rounded-xl w-full border-gray-200 focus:border-[#009688]"
                   />
                 </div>
               </div>
@@ -196,26 +196,26 @@ export default function AdminSettings() {
             <Button
               type="submit"
               disabled={savingAccount}
-              className="bg-[#009688] hover:bg-[#00796b] text-white font-extrabold rounded-xl h-10 text-xs gap-1.5 px-5 shadow-md shadow-[#009688]/15"
+              className="bg-[#009688] hover:bg-[#00796b] text-white font-bold rounded-xl h-10 text-xs gap-1.5 px-5 shadow-md shadow-[#009688]/15"
             >
               {savingAccount ? <CheckCircle2 className="w-4 h-4 animate-bounce" /> : <Save className="w-4 h-4" />}
-              {savingAccount ? (isAr ? 'جاري الحفظ...' : 'Saving...') : (isAr ? 'حفظ معلومات الحساب' : 'Update Credentials')}
+              <span>{savingAccount ? (isAr ? 'جاري الحفظ...' : 'Saving...') : (isAr ? 'حفظ معلومات الحساب' : 'Update Credentials')}</span>
             </Button>
           </div>
         </form>
       </div>
 
       {/* 2. Simple Site Info Section */}
-      <div className="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm space-y-5">
-        <div className="flex items-center gap-2.5 pb-3 border-b border-gray-100">
-          <div className="w-8 h-8 rounded-xl bg-[#009688]/10 text-[#009688] flex items-center justify-center font-bold">
-            <Globe className="w-4 h-4" />
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-gray-100 p-5 sm:p-6 shadow-sm space-y-5">
+        <div className="flex items-center gap-3 pb-4 border-b border-gray-100">
+          <div className="w-10 h-10 rounded-xl bg-[#009688]/10 text-[#009688] flex items-center justify-center font-bold shrink-0">
+            <Globe className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-sm font-extrabold text-[#112d27]">
+            <h2 className="text-sm sm:text-base font-bold text-[#112d27]">
               {isAr ? 'معلومات الموقع الأساسية' : 'Basic Site Information'}
             </h2>
-            <p className="text-[11px] text-gray-400 font-medium">
+            <p className="text-xs text-gray-400 font-normal mt-0.5">
               {isAr ? 'اسم المنصة وبريد التواصل الظاهر للطلاب.' : 'The general academy name and public support contact.'}
             </p>
           </div>
@@ -231,7 +231,7 @@ export default function AdminSettings() {
               <Input
                 value={siteName}
                 onChange={(e) => setSiteName(e.target.value)}
-                className="h-10 text-xs font-semibold rounded-xl"
+                className="h-10 text-xs sm:text-sm font-normal rounded-xl w-full border-gray-200 focus:border-[#009688]"
                 required
               />
             </div>
@@ -244,7 +244,7 @@ export default function AdminSettings() {
                 type="email"
                 value={supportEmail}
                 onChange={(e) => setSupportEmail(e.target.value)}
-                className="h-10 text-xs font-semibold rounded-xl"
+                className="h-10 text-xs sm:text-sm font-normal rounded-xl w-full border-gray-200 focus:border-[#009688]"
                 required
               />
             </div>
@@ -255,10 +255,10 @@ export default function AdminSettings() {
             <Button
               type="submit"
               disabled={savingSite}
-              className="bg-[#009688] hover:bg-[#00796b] text-white font-extrabold rounded-xl h-10 text-xs gap-1.5 px-5 shadow-md shadow-[#009688]/15"
+              className="bg-[#009688] hover:bg-[#00796b] text-white font-bold rounded-xl h-10 text-xs gap-1.5 px-5 shadow-md shadow-[#009688]/15"
             >
               {savingSite ? <CheckCircle2 className="w-4 h-4 animate-bounce" /> : <Save className="w-4 h-4" />}
-              {savingSite ? (isAr ? 'جاري الحفظ...' : 'Saving...') : (isAr ? 'حفظ معلومات الموقع' : 'Save Site Info')}
+              <span>{savingSite ? (isAr ? 'جاري الحفظ...' : 'Saving...') : (isAr ? 'حفظ معلومات الموقع' : 'Save Site Info')}</span>
             </Button>
           </div>
         </form>

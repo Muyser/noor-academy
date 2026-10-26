@@ -43,16 +43,16 @@ export default function FAQ() {
         
         {/* Section Heading */}
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#009688]/10 text-[#009688] text-xs font-bold mb-4 border border-[#009688]/20">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#009688]/10 text-[#009688] text-xs font-semibold mb-4 border border-[#009688]/20">
             <span className="w-2 h-2 rounded-full bg-[#009688]" />
             {t('faq.eyebrow') || (isAr ? 'أسئلة مهمة' : 'Important Questions')}
           </div>
 
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#112d27] mb-3">
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#112d27] mb-3">
             {t('faq.heading') || (isAr ? 'الأسئلة الشائعة' : 'Frequently Asked Questions')}
           </h2>
 
-          <p className="text-sm sm:text-base text-gray-500 font-medium">
+          <p className="text-xs sm:text-sm text-gray-500 font-normal">
             {t('faq.description') || (isAr ? 'كل ما تحتاج إلى معرفته قبل بدء رحلتك في تعلّم اللغات.' : 'Everything you need to know before starting your language learning journey.')}
           </p>
         </div>
@@ -84,14 +84,14 @@ export default function FAQ() {
                 >
                   <button
                     onClick={() => setOpen(isOpen ? null : faqId)}
-                    className="w-full flex items-center justify-between gap-4 p-5 sm:p-6 text-start cursor-pointer"
+                    className="w-full flex items-center justify-between gap-4 p-4 sm:p-6 text-start cursor-pointer"
                   >
-                    <div className="flex items-center gap-3.5">
+                    <div className="flex items-center gap-3">
                       {/* Question mark icon box */}
-                      <div className="w-9 h-9 rounded-2xl bg-[#e3f6f3] text-[#009688] flex items-center justify-center shrink-0">
-                        <HelpCircle className="w-4 h-4 font-semibold" />
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl bg-[#e3f6f3] text-[#009688] flex items-center justify-center shrink-0">
+                        <HelpCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 font-semibold" />
                       </div>
-                      <span className="font-extrabold text-[#112d27] text-base sm:text-lg">
+                      <span className="font-semibold text-[#112d27] text-xs sm:text-base">
                         {question}
                       </span>
                     </div>
@@ -99,11 +99,11 @@ export default function FAQ() {
                     {/* Toggle Button Box */}
                     <div
                       className={cn(
-                        'shrink-0 w-9 h-9 rounded-2xl flex items-center justify-center transition-all duration-300',
+                        'shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-2xl flex items-center justify-center transition-all duration-300',
                         isOpen ? 'bg-[#009688] text-white rotate-90 shadow-sm' : 'bg-[#e3f6f3] text-[#009688]'
                       )}
                     >
-                      {isOpen ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                      {isOpen ? <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
                     </div>
                   </button>
 
@@ -112,7 +112,7 @@ export default function FAQ() {
                     className="overflow-hidden transition-all duration-300 ease-out"
                     style={{ maxHeight: isOpen ? '250px' : '0', opacity: isOpen ? 1 : 0 }}
                   >
-                    <div className="px-6 pb-6 pt-1 text-sm sm:text-base text-gray-500 font-medium leading-relaxed border-t border-gray-50">
+                    <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-1 text-xs sm:text-sm text-gray-500 font-normal leading-relaxed border-t border-gray-50">
                       {answer}
                     </div>
                   </div>

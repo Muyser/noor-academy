@@ -12,13 +12,6 @@ const blogPostSchema = new mongoose.Schema(
       default: '',
       trim: true,
     },
-    slug: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-      lowercase: true,
-    },
     category: {
       type: String,
       default: 'Learning',

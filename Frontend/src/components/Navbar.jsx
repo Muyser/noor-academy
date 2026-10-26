@@ -6,6 +6,8 @@ import { useAuth } from '@/lib/AuthContext';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 export default function Navbar() {
   const { t, lang, toggleLang, isRTL } = useI18n();
   const { isAuthenticated, user, logout } = useAuth();
@@ -40,14 +42,37 @@ export default function Navbar() {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     try {
-      logout(false);
+      // Optional: Call backend logout route if your API supports it
+      const token = localStorage.getItem('token');
+      if (token && API_URL) {
+        await fetch(`${API_URL}/api/auth/logout`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).catch(() => {}); // silent catch if endpoint doesn't exist
+      }
     } catch (err) {
       console.error('Logout error:', err);
     } finally {
+      // Clear all local auth storage keys
       localStorage.removeItem('token');
+      localStorage.removeItem('noor_user');
+      
+      // Call AuthContext logout method if available
+      if (typeof logout === 'function') {
+        try {
+          logout(false);
+        } catch (e) {
+          // ignore
+        }
+      }
+
+      // Force navigation to home and reload state if necessary
       navigate('/');
+      window.location.reload();
     }
   };
 
@@ -63,8 +88,8 @@ export default function Navbar() {
         className={cn(
           'fixed top-0 inset-x-0 z-50 transition-all duration-300',
           scrolled
-            ? 'bg-[#112d27]/95 text-white backdrop-blur-md shadow-lg py-2.5 border-b border-emerald-900/30' // Slightly increased padding here
-            : 'bg-[#112d27] text-white py-3.5 shadow-md' // Slightly increased padding here for slightly more height
+            ? 'bg-[#112d27]/95 text-white backdrop-blur-md shadow-lg py-2.5 border-b border-emerald-900/30'
+            : 'bg-[#112d27] text-white py-3.5 shadow-md'
         )}
       >
         <nav className="container-page flex items-center justify-between gap-4">

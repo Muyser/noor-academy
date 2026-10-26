@@ -8,6 +8,8 @@ import { useI18n } from '@/lib/useI18n';
 import { useAuth } from '@/lib/AuthContext';
 import { cn } from '@/lib/utils';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 export default function DashboardLayout() {
   const { t, isRTL, lang } = useI18n(); 
   const isAr = lang === 'ar';
@@ -26,14 +28,34 @@ export default function DashboardLayout() {
     { icon: Settings, label: t('dashboard.settings') || 'Settings', to: '/settings' },
   ];
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     try {
-      logout();
+      const token = localStorage.getItem('token');
+      if (token && API_URL) {
+        await fetch(`${API_URL}/api/auth/logout`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).catch(() => {});
+      }
     } catch (err) {
       console.error('Logout error:', err);
     } finally {
+      // Clear all local auth storage keys
       localStorage.removeItem('token');
+      localStorage.removeItem('noor_user');
+      
+      if (typeof logout === 'function') {
+        try {
+          logout(false);
+        } catch (e) {
+          // ignore
+        }
+      }
+
       navigate('/');
+      window.location.reload();
     }
   };
 

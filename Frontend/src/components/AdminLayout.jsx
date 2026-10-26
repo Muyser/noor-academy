@@ -9,6 +9,8 @@ import { useI18n } from '@/lib/useI18n';
 import { useAuth } from '@/lib/AuthContext';
 import { cn } from '@/lib/utils';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 export default function AdminLayout() {
   const { t, isRTL, lang } = useI18n();
   const isAr = lang === 'ar';
@@ -32,9 +34,35 @@ export default function AdminLayout() {
     { icon: Settings, label: t('admin.settings') || (isAr ? 'الإعدادات' : 'Settings'), to: '/admin/settings' },
   ];
 
-  const handleLogout = () => {
-    logout(false);
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (token && API_URL) {
+        await fetch(`${API_URL}/api/auth/logout`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).catch(() => {});
+      }
+    } catch (err) {
+      console.error('Logout error:', err);
+    } finally {
+      // Clear all local auth storage keys
+      localStorage.removeItem('token');
+      localStorage.removeItem('noor_user');
+      
+      if (typeof logout === 'function') {
+        try {
+          logout(false);
+        } catch (e) {
+          // ignore
+        }
+      }
+
+      navigate('/');
+      window.location.reload();
+    }
   };
 
   const isActive = (path) => {

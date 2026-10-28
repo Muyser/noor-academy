@@ -44,7 +44,6 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try {
-      // Optional: Call backend logout route if your API supports it
       const token = localStorage.getItem('token');
       if (token && API_URL) {
         await fetch(`${API_URL}/api/auth/logout`, {
@@ -52,16 +51,14 @@ export default function Navbar() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }).catch(() => {}); // silent catch if endpoint doesn't exist
+        }).catch(() => {});
       }
     } catch (err) {
       console.error('Logout error:', err);
     } finally {
-      // Clear all local auth storage keys
       localStorage.removeItem('token');
       localStorage.removeItem('noor_user');
       
-      // Call AuthContext logout method if available
       if (typeof logout === 'function') {
         try {
           logout(false);
@@ -70,7 +67,6 @@ export default function Navbar() {
         }
       }
 
-      // Force navigation to home and reload state if necessary
       navigate('/');
       window.location.reload();
     }
@@ -218,31 +214,32 @@ export default function Navbar() {
               ))}
             </div>
 
-            <div className="pt-4 border-t border-white/10 space-y-2">
+            {/* أزرار تسجيل الدخول وحساب المستخدم المتجاوبة في الهاتف */}
+            <div className="pt-4 border-t border-white/10 space-y-2.5">
               {isAuthenticated ? (
                 <>
-                  <Link to={dashboardPath}>
-                    <Button variant="outline" className="w-full justify-start border-white/20 bg-white/5 text-white hover:bg-white/10 font-bold gap-2 text-xs h-10">
+                  <Link to={dashboardPath} className="block w-full">
+                    <Button variant="outline" className="w-full justify-center border-white/20 bg-white/5 text-white hover:bg-white/10 font-bold gap-2 text-xs h-11 rounded-xl shadow-sm">
                       {isAdmin ? <ShieldCheck className="w-4 h-4 text-purple-400" /> : <User className="w-4 h-4 text-emerald-400" />}
-                      {dashboardLabel}
+                      <span className="truncate">{dashboardLabel}</span>
                     </Button>
                   </Link>
-                  <Button onClick={handleLogout} variant="outline" className="w-full justify-start border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20 font-bold text-xs h-10">
-                    <LogOut className="w-4 h-4 mr-2" />
-                    {t('nav.logout') || 'Logout'}
+                  <Button onClick={handleLogout} variant="outline" className="w-full justify-center border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20 font-bold text-xs h-11 rounded-xl shadow-sm">
+                    <LogOut className="w-4 h-4 mr-2 shrink-0" />
+                    <span>{t('nav.logout') || 'Logout'}</span>
                   </Button>
                 </>
               ) : (
-                <Link to="/login">
-                  <Button variant="outline" className="w-full justify-start border-white/20 bg-white/5 text-white hover:bg-white/10 font-bold text-xs h-10">
-                    {t('nav.login') || 'Sign In'}
+                <Link to="/login" className="block w-full">
+                  <Button variant="outline" className="w-full justify-center border-white/20 bg-white/10 text-white hover:bg-white/20 font-bold text-xs h-11 rounded-xl shadow-sm">
+                    <span>{t('nav.login') || 'Sign In'}</span>
                   </Button>
                 </Link>
               )}
               
-              <Link to="/courses">
-                <Button className="w-full bg-[#009688] hover:bg-[#00796b] text-white font-extrabold rounded-xl h-10 text-xs shadow-md">
-                  {t('nav.startLearning') || 'Browse Courses'}
+              <Link to="/courses" className="block w-full">
+                <Button className="w-full justify-center bg-[#009688] hover:bg-[#00796b] text-white font-extrabold rounded-xl h-11 text-xs shadow-md">
+                  <span>{t('nav.startLearning') || 'Browse Courses'}</span>
                 </Button>
               </Link>
             </div>

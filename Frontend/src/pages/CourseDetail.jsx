@@ -44,7 +44,6 @@ export default function CourseDetail() {
       .then((data) => {
         if (data && (data._id || data.id)) {
           setCourse(data);
-          // Default ONLY the first section to open by default when data loads
           if (Array.isArray(data.sections)) {
             const initialSections = {};
             data.sections.forEach((_, idx) => {
@@ -169,74 +168,74 @@ export default function CourseDetail() {
   const sections = Array.isArray(course.sections) ? course.sections : [];
 
   return (
-    <div className={`min-h-screen bg-[#f8fcfb] ${isAr ? 'dir-rtl' : 'dir-ltr'}`}>
+    <div className={`min-h-screen bg-[#f8fcfb] overflow-x-hidden pb-24 lg:pb-12 ${isAr ? 'dir-rtl' : 'dir-ltr'}`}>
       
       {/* Header Banner */}
-      <section className="bg-[#f8fcfb] text-[#112d27] pt-8 pb-10 border-b border-gray-100/60">
+      <section className="bg-[#f8fcfb] text-[#112d27] pt-6 pb-8 sm:py-10 border-b border-gray-100/60">
         <div className="container-page max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <nav className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 mb-6 font-medium">
-            <Link to="/courses" className="text-[#009688] hover:underline flex items-center gap-1">
+          <nav className="flex items-center gap-2 text-xs text-gray-500 mb-4 sm:mb-6 font-medium overflow-hidden">
+            <Link to="/courses" className="text-[#009688] hover:underline flex items-center gap-1 shrink-0">
               <span>←</span> {isAr ? 'جميع الدورات' : 'All Courses'}
             </Link>
-            <span className="text-gray-300">/</span>
+            <span className="text-gray-300 shrink-0">/</span>
             <span className="text-gray-600 truncate font-semibold">{courseTitle}</span>
           </nav>
 
-          <div className="grid lg:grid-cols-3 gap-8 items-start">
+          <div className="grid lg:grid-cols-3 gap-6 lg:gap-8 items-start">
             <div className="lg:col-span-2">
-              <div className="flex flex-wrap gap-2 mb-4">
+              <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
                 <span className={cn(
-                  'inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-black text-white shadow-xs',
+                  'inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] sm:text-xs font-black text-white shadow-xs',
                   isOffline ? 'bg-purple-600' : 'bg-[#009688]'
                 )}>
                   {isOffline ? <MapPin className="w-3.5 h-3.5" /> : <Video className="w-3.5 h-3.5" />}
                   {isOffline ? (isAr ? 'دورة حضورية' : 'Offline / In-Person') : (isAr ? 'دورة أونلاين' : 'Online Course')}
                 </span>
 
-                <span className="px-3 py-1 rounded-lg bg-gray-100 text-xs font-bold text-gray-700">
+                <span className="px-3 py-1 rounded-lg bg-gray-100 text-[11px] sm:text-xs font-bold text-gray-700">
                   {course.level || 'A1 → B1'}
                 </span>
 
                 {isFree ? (
-                  <span className="px-3 py-1 rounded-lg bg-emerald-100 text-xs font-black text-emerald-700">
+                  <span className="px-3 py-1 rounded-lg bg-emerald-100 text-[11px] sm:text-xs font-black text-emerald-700">
                     {isAr ? 'مجاني بالكامل' : 'Free Course'}
                   </span>
                 ) : (
-                  <span className="px-3 py-1 rounded-lg bg-teal-50 text-xs font-bold text-[#009688] capitalize">
+                  <span className="px-3 py-1 rounded-lg bg-teal-50 text-[11px] sm:text-xs font-bold text-[#009688] capitalize">
                     {course.category}
                   </span>
                 )}
               </div>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight mb-4 text-[#112d27]">
+              <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold leading-tight mb-3 sm:mb-4 text-[#112d27] break-words">
                 {courseTitle}
               </h1>
 
               {course.short_description && (
-                <p className="text-xs sm:text-sm text-gray-600 font-medium mb-6 leading-relaxed">
+                <p className="text-xs sm:text-sm text-gray-600 font-medium mb-5 sm:mb-6 leading-relaxed">
                   {course.short_description}
                 </p>
               )}
 
               {isOffline && (
-                <div className="mb-6 p-4 rounded-2xl bg-purple-50/80 border border-purple-200 text-purple-900 grid sm:grid-cols-2 gap-3 text-xs font-semibold">
+                <div className="mb-5 p-3.5 sm:p-4 rounded-2xl bg-purple-50/80 border border-purple-200 text-purple-900 grid sm:grid-cols-2 gap-2.5 text-xs font-semibold">
                   {course.location && (
                     <div className="flex items-center gap-2">
                       <MapPin className="w-4 h-4 text-purple-600 shrink-0" />
-                      <span><strong>{isAr ? 'المكان:' : 'Location:'}</strong> {course.location}</span>
+                      <span className="truncate"><strong>{isAr ? 'المكان:' : 'Location:'}</strong> {course.location}</span>
                     </div>
                   )}
                   {course.schedule_days && (
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-purple-600 shrink-0" />
-                      <span><strong>{isAr ? 'الأيام:' : 'Days:'}</strong> {course.schedule_days}</span>
+                      <span className="truncate"><strong>{isAr ? 'الأيام:' : 'Days:'}</strong> {course.schedule_days}</span>
                     </div>
                   )}
                   {course.schedule_time && (
                     <div className="flex items-center gap-2">
                       <Clock className="w-4 h-4 text-purple-600 shrink-0" />
-                      <span><strong>{isAr ? 'التوقيت:' : 'Time:'}</strong> {course.schedule_time}</span>
+                      <span className="truncate"><strong>{isAr ? 'التوقيت:' : 'Time:'}</strong> {course.schedule_time}</span>
                     </div>
                   )}
                   {course.capacity !== undefined && (
@@ -249,7 +248,7 @@ export default function CourseDetail() {
               )}
 
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#009688] text-white flex items-center justify-center font-bold text-xs">
+                <div className="w-8 h-8 rounded-full bg-[#009688] text-white flex items-center justify-center font-bold text-xs shrink-0">
                   {course.instructor ? course.instructor.charAt(0) : 'N'}
                 </div>
                 <div className="text-xs">
@@ -259,7 +258,8 @@ export default function CourseDetail() {
               </div>
             </div>
 
-            <div className="relative aspect-video rounded-3xl overflow-hidden shadow-lg bg-gray-900 border border-gray-100">
+            {/* تم تصغير حجم الصورة هنا لتصبح أصغر وأكثر تناسقاً عبر max-w-[260px] sm:max-w-xs */}
+            <div className="w-full max-w-[260px] sm:max-w-xs mx-auto lg:max-w-sm aspect-video rounded-2xl sm:rounded-3xl overflow-hidden shadow-md bg-gray-900 border border-gray-100">
               {course.image ? (
                 <Image src={course.image} alt={courseTitle} fittingType="fill" className="w-full h-full object-cover opacity-90" />
               ) : (
@@ -267,7 +267,7 @@ export default function CourseDetail() {
                   {courseTitle.charAt(0)}
                 </div>
               )}
-              <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md text-gray-800 text-[11px] font-extrabold px-3 py-1 rounded-lg shadow-sm">
+              <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md text-gray-800 text-[10px] sm:text-[11px] font-extrabold px-2.5 py-1 rounded-lg shadow-sm">
                 {isOffline ? (isAr ? 'مركز التدريب' : 'In-Person Class') : (isAr ? 'دورة أونلاين' : 'Online Program')}
               </div>
             </div>
@@ -277,23 +277,23 @@ export default function CourseDetail() {
       </section>
 
       {/* Main Content & Sidebar */}
-      <div className="container-page max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="grid lg:grid-cols-3 gap-8 items-start">
+      <div className="container-page max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
+        <div className="grid lg:grid-cols-3 gap-6 sm:gap-8 items-start">
           
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-6 sm:space-y-8">
             
             {/* Outcomes */}
             {outcomes.length > 0 && (
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm">
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-gray-100 shadow-sm">
                 <div className="text-[11px] font-extrabold uppercase tracking-wider text-[#009688] mb-1">
                   {isAr ? 'نتائج الدورة' : 'COURSE OUTCOMES'}
                 </div>
-                <h2 className="text-xl sm:text-2xl font-extrabold text-[#112d27] mb-2">
+                <h2 className="text-lg sm:text-2xl font-extrabold text-[#112d27] mb-2">
                   {isAr ? 'ما ستتعلمه' : "What You'll Learn"}
                 </h2>
                 <div className="grid sm:grid-cols-2 gap-3 mt-4">
                   {outcomes.map((item, i) => (
-                    <div key={i} className="flex items-start gap-3 p-3.5 rounded-2xl bg-[#f8fcfb] border border-gray-100">
+                    <div key={i} className="flex items-start gap-3 p-3 sm:p-3.5 rounded-2xl bg-[#f8fcfb] border border-gray-100">
                       <CheckCircle2 className="w-4 h-4 text-[#009688] shrink-0 mt-0.5" />
                       <span className="text-xs font-semibold text-gray-700 leading-snug">{item}</span>
                     </div>
@@ -304,12 +304,12 @@ export default function CourseDetail() {
 
             {/* Honors */}
             {honors.length > 0 && (
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm">
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-gray-100 shadow-sm">
                 <div className="text-[11px] font-extrabold uppercase tracking-wider text-amber-600 mb-1 flex items-center gap-1.5">
                   <Award className="w-3.5 h-3.5" />
                   {isAr ? 'مزايا وشهادات الشرف' : 'COURSE HONORS & PERKS'}
                 </div>
-                <h2 className="text-xl sm:text-2xl font-extrabold text-[#112d27] mb-4">
+                <h2 className="text-lg sm:text-2xl font-extrabold text-[#112d27] mb-4">
                   {isAr ? 'ما تحصل عليه عند التخرج' : 'Honors & Certification'}
                 </h2>
                 <div className="space-y-2.5">
@@ -323,15 +323,15 @@ export default function CourseDetail() {
               </div>
             )}
 
-            {/* Sections & Free Previews (Udemy-Style Accordion - First section open by default) */}
+            {/* Sections & Free Previews */}
             {sections.length > 0 && (
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm">
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-gray-100 shadow-sm">
                 <div className="text-[11px] font-extrabold uppercase tracking-wider text-[#009688] mb-1">
                   {isAr ? 'المنهج التعليمي' : 'CURRICULUM'}
                 </div>
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center justify-between mb-5 sm:mb-6">
                   <div>
-                    <h2 className="text-xl sm:text-2xl font-extrabold text-[#112d27]">
+                    <h2 className="text-lg sm:text-2xl font-extrabold text-[#112d27]">
                       {isAr ? 'محتوى الدورة والأقسام' : 'Course Content'}
                     </h2>
                     <p className="text-xs text-gray-400 font-medium mt-0.5">
@@ -345,7 +345,7 @@ export default function CourseDetail() {
                       sections.forEach((_, idx) => { newState[idx] = !allExpanded; });
                       setExpandedSections(newState);
                     }}
-                    className="text-xs font-bold text-[#009688] hover:underline"
+                    className="text-xs font-bold text-[#009688] hover:underline shrink-0"
                   >
                     {Object.values(expandedSections).every(Boolean) 
                       ? (isAr ? 'إخفاء الكل' : 'Collapse All') 
@@ -361,15 +361,15 @@ export default function CourseDetail() {
                       <div key={sec._id || sIdx} className="border border-gray-200 rounded-2xl overflow-hidden bg-[#f8fcfb] transition-all">
                         <button
                           onClick={() => toggleSection(sIdx)}
-                          className="w-full flex items-center justify-between p-4 bg-gray-50/80 hover:bg-gray-100/80 transition-colors text-start"
+                          className="w-full flex items-center justify-between p-3.5 sm:p-4 bg-gray-50/80 hover:bg-gray-100/80 transition-colors text-start"
                         >
-                          <div className="flex items-center gap-2.5">
-                            <ChevronRight className={cn('w-4 h-4 text-[#009688] transition-transform duration-200', isOpen && 'rotate-90')} />
-                            <span className="font-extrabold text-xs sm:text-sm text-[#112d27]">
+                          <div className="flex items-center gap-2.5 overflow-hidden pr-2">
+                            <ChevronRight className={cn('w-4 h-4 text-[#009688] shrink-0 transition-transform duration-200', isOpen && 'rotate-90')} />
+                            <span className="font-extrabold text-xs sm:text-sm text-[#112d27] truncate">
                               {sIdx + 1}. {isAr ? sec.title_ar || sec.title : sec.title}
                             </span>
                           </div>
-                          <span className="text-[11px] font-semibold text-gray-400">
+                          <span className="text-[11px] font-semibold text-gray-400 shrink-0">
                             {sec.lectures?.length || 0} {isAr ? 'دروس' : 'lectures'}
                           </span>
                         </button>
@@ -377,17 +377,17 @@ export default function CourseDetail() {
                         {isOpen && (
                           <div className="p-3 space-y-2 bg-white border-t border-gray-100">
                             {sec.lectures?.map((lec, lIdx) => (
-                              <div key={lec._id || lIdx} className="text-xs text-gray-700 flex items-center justify-between p-2.5 rounded-xl bg-[#f8fcfb]/50 border border-gray-100 hover:bg-gray-50 transition-colors">
-                                <div className="flex items-center gap-2.5">
+                              <div key={lec._id || lIdx} className="text-xs text-gray-700 flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2.5 rounded-xl bg-[#f8fcfb]/50 border border-gray-100 hover:bg-gray-50 transition-colors">
+                                <div className="flex items-center gap-2.5 overflow-hidden">
                                   {lec.is_preview ? (
                                     <PlayCircle className="w-4 h-4 text-[#009688] shrink-0" />
                                   ) : (
                                     <Lock className="w-3.5 h-3.5 text-gray-400 shrink-0" />
                                   )}
-                                  <span className="font-semibold">{isAr ? lec.title_ar || lec.title : lec.title}</span>
+                                  <span className="font-semibold truncate">{isAr ? lec.title_ar || lec.title : lec.title}</span>
                                 </div>
 
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0">
                                   {lec.is_preview && (
                                     <button
                                       onClick={() => setPreviewLecture(lec)}
@@ -412,11 +412,11 @@ export default function CourseDetail() {
 
             {/* Description */}
             {course.description && (
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm">
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-gray-100 shadow-sm">
                 <div className="text-[11px] font-extrabold uppercase tracking-wider text-[#009688] mb-1">
                   {isAr ? 'حول هذه الدورة' : 'ABOUT THIS COURSE'}
                 </div>
-                <h2 className="text-xl sm:text-2xl font-extrabold text-[#112d27] mb-4">
+                <h2 className="text-lg sm:text-2xl font-extrabold text-[#112d27] mb-4">
                   {isAr ? 'تفاصيل الدورة التدريبية' : 'Course Overview'}
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-500 font-medium leading-relaxed whitespace-pre-line">
@@ -427,11 +427,11 @@ export default function CourseDetail() {
 
             {/* Requirements */}
             {requirements.length > 0 && (
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm">
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-gray-100 shadow-sm">
                 <div className="text-[11px] font-extrabold uppercase tracking-wider text-[#009688] mb-1">
                   {isAr ? 'المتطلبات' : 'REQUIREMENTS'}
                 </div>
-                <h2 className="text-xl sm:text-2xl font-extrabold text-[#112d27] mb-5">
+                <h2 className="text-lg sm:text-2xl font-extrabold text-[#112d27] mb-5">
                   {isAr ? 'قبل أن تبدأ' : 'Before You Start'}
                 </h2>
                 <div className="grid sm:grid-cols-2 gap-3">
@@ -447,9 +447,9 @@ export default function CourseDetail() {
 
           </div>
 
-          {/* Right Column: Enrollment Card */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-24 bg-white rounded-3xl border border-gray-100 shadow-xl p-6 sm:p-7">
+          {/* Right Column: Enrollment Card (Desktop) */}
+          <div className="lg:col-span-1 hidden lg:block">
+            <div className="sticky top-20 bg-white rounded-3xl border border-gray-100 shadow-xl p-7">
               
               <div className="text-center pb-5 border-b border-gray-100">
                 <div className="text-[11px] font-bold text-gray-400 uppercase mb-1">
@@ -523,16 +523,57 @@ export default function CourseDetail() {
         </div>
       </div>
 
+      {/* FIXED MOBILE BOTTOM ENROLL BAR (Fixed Navbar style for mobile users) */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-gray-200 px-4 py-3 shadow-2xl lg:hidden flex items-center justify-between gap-4">
+        <div>
+          <div className="text-[10px] font-bold text-gray-400 uppercase">
+            {isAr ? 'السعر' : 'Price'}
+          </div>
+          <div className="text-lg font-black text-[#112d27]">
+            {isFree ? (
+              <span className="text-emerald-600">{isAr ? 'مجاناً' : 'FREE'}</span>
+            ) : (
+              <>USD {course.price || 0}<span className="text-xs font-medium text-gray-400">.00</span></>
+            )}
+          </div>
+        </div>
+
+        <div className="flex-1 max-w-[220px]">
+          {isOffline ? (
+            <Button
+              onClick={handleWhatsApp}
+              className="w-full h-11 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold gap-1.5 rounded-xl shadow-md"
+            >
+              <MessageCircle className="w-4 h-4 text-white" />
+              <span>{isAr ? 'التسجيل عبر واتساب' : 'WhatsApp'}</span>
+            </Button>
+          ) : (
+            <Button
+              onClick={handleEnroll}
+              disabled={enrolling}
+              className="w-full h-11 bg-[#009688] hover:bg-[#00796b] text-white text-xs font-extrabold gap-1.5 rounded-xl shadow-md"
+            >
+              {enrolling ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <span>{isFree ? (isAr ? 'سجل مجاناً' : 'Enroll Free') : (isAr ? 'سجل الآن' : 'Enroll Now')}</span>
+              )}
+              {!enrolling && <ChevronRight className={cn('w-3.5 h-3.5', isRTL && 'rotate-180')} />}
+            </Button>
+          )}
+        </div>
+      </div>
+
       {/* Free Preview Video Modal */}
       {previewLecture && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-3xl max-w-2xl w-full p-6 text-white relative shadow-2xl space-y-4">
+          <div className="bg-slate-900 border border-slate-700 rounded-3xl max-w-2xl w-full p-5 sm:p-6 text-white relative shadow-2xl space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#009688]">
                   {isAr ? 'معاينة مجانية' : 'Free Preview'}
                 </span>
-                <h3 className="text-lg font-extrabold">{isAr ? previewLecture.title_ar || previewLecture.title : previewLecture.title}</h3>
+                <h3 className="text-base sm:text-lg font-extrabold">{isAr ? previewLecture.title_ar || previewLecture.title : previewLecture.title}</h3>
               </div>
               <button
                 onClick={() => setPreviewLecture(null)}

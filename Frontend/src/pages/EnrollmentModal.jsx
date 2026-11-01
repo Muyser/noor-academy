@@ -5,6 +5,35 @@ import { toast } from '@/components/ui/use-toast';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
+// Smart WhatsApp number formatter utility
+const formatWhatsAppNumber = (rawPhone) => {
+  if (!rawPhone) return "";
+  let cleaned = rawPhone.toString().trim().replace(/[^\d+]/g, "");
+  if (cleaned.startsWith("0")) {
+    cleaned = "250" + cleaned.substring(1); // Default country code fallback
+  }
+  if (cleaned.startsWith("+")) {
+    cleaned = cleaned.substring(1);
+  }
+  if (cleaned.length < 9) {
+    return "";
+  }
+  return cleaned;
+};
+
+// WhatsApp redirect handler
+const openStudentWhatsApp = (adminPhone = "0794420606", customMessage = "") => {
+  const formattedPhone = formatWhatsAppNumber(adminPhone);
+  if (!formattedPhone) {
+    console.error("Invalid WhatsApp phone number");
+    return;
+  }
+  const defaultMsg = encodeURIComponent(
+    customMessage || "Hello! I am a student at Noor Academy and I need assistance with my course registration/payment."
+  );
+  window.open(`https://wa.me/${formattedPhone}?text=${defaultMsg}`, "_blank");
+};
+
 export default function EnrollmentModal({ course, isOpen, onClose }) {
   const { lang } = useI18n();
   const isAr = lang === 'ar';
@@ -87,8 +116,16 @@ export default function EnrollmentModal({ course, isOpen, onClose }) {
 
         toast({
           title: isAr ? 'تم إرسال الطلب بنجاح' : 'Enrollment Submitted!',
-          description: isAr ? 'تم إرسال إشعار الدفع بنجاح. سيتم مراجعته وتفعيل الدورة لك قريباً.' : 'Your receipt has been submitted for admin verification.',
+          description: isAr ? 'تم إرسال إشعار الدفع بنجاح وحفظه في النظام. سيتم مراجعته وتفعيل الدورة لك قريباً.' : 'Your receipt has been saved and submitted for admin verification.',
         });
+
+        // Automatically construct the WhatsApp message and open redirect after saving to DB
+        const courseTitle = isAr ? course?.title_ar || course?.title : course?.title;
+        const whatsappMsg = isAr
+          ? `مرحباً أستاذ، لقد قمت بالتسجيل وإرفاق إشعار الدفع لدورة: ${courseTitle}. يرجى تأكيد الدفع وتفعيل الدورة.`
+          : `Hello! I have completed my registration and submitted my payment receipt for: ${courseTitle}. Please verify my payment.`;
+
+        openStudentWhatsApp("0794420606", whatsappMsg);
 
         onClose();
       }
@@ -152,7 +189,7 @@ export default function EnrollmentModal({ course, isOpen, onClose }) {
             </button>
           </div>
 
-          {/* BANKAK PAYMENT CARD VIEW (Styled matching image) */}
+          {/* BANKAK PAYMENT CARD VIEW */}
           {paymentMethod === 'bankak' && (
             <div className="bg-white rounded-3xl p-6 shadow-xl text-slate-800 space-y-5 animate-in fade-in duration-200">
               
@@ -226,17 +263,13 @@ export default function EnrollmentModal({ course, isOpen, onClose }) {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-4 px-6 rounded-2xl text-white font-extrabold text-sm shadow-xl transition-all flex items-center justify-center gap-3 disabled:opacity-50 ${
-              paymentMethod === 'bankak'
-                ? 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-600/30'
-                : 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-600/30'
-            }`}
+            className="w-full py-4 px-6 rounded-2xl text-white font-extrabold text-sm shadow-xl transition-all flex items-center justify-center gap-3 disabled:opacity-50 bg-indigo-600 hover:bg-indigo-700 shadow-indigo-600/30"
           >
             {loading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
               <>
-                <span>{isAr ? 'تأكيد الدفع' : 'Confirm Payment'}</span>
+                <span>{isAr ? 'تأكيد الدفع وإرسال الإشعار' : 'Confirm & Open WhatsApp'}</span>
                 {isAr ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
               </>
             )}

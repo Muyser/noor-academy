@@ -15,7 +15,7 @@ export default function Login() {
   const { lang } = useI18n();
   const isAr = lang === 'ar';
   const navigate = useNavigate();
-  const { checkUserAuth } = useAuth();
+  const { setAuthUser } = useAuth(); // Extract setAuthUser
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -44,12 +44,13 @@ export default function Login() {
 
       const { user, token } = data;
 
-      localStorage.setItem("is_logged_in", "true");
-      localStorage.setItem("token", token);
-      localStorage.setItem("noor_user", JSON.stringify(user));
-
-      if (checkUserAuth) {
-        await checkUserAuth().catch(() => null);
+      // UPDATE AUTH CONTEXT INSTANTLY WITH REAL USER DATA
+      if (setAuthUser) {
+        setAuthUser(user, token);
+      } else {
+        localStorage.setItem("is_logged_in", "true");
+        localStorage.setItem("token", token);
+        localStorage.setItem("noor_user", JSON.stringify(user));
       }
 
       const isAdmin = user?.role === 'admin';

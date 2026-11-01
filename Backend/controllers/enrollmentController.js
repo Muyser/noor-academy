@@ -164,10 +164,8 @@ export const updateLectureProgress = async (req, res) => {
       });
     }
 
-    // Convert string lectureId to ObjectId safely
     const lectureObjectId = new mongoose.Types.ObjectId(lectureId);
 
-    // Check if already completed
     const alreadyCompleted = enrollment.completed_lectures.some(
       (id) => id.toString() === lectureObjectId.toString()
     );
@@ -185,16 +183,13 @@ export const updateLectureProgress = async (req, res) => {
     if (enrollment.progress >= 100) {
       enrollment.status = 'completed';
 
-      // Auto-generate certificate upon completion
       const existingCert = await Certificate.findOne({
         student: enrollment.student,
         course: enrollment.course,
       });
 
       if (!existingCert) {
-        // Fetch user data to pass required certificate fields
         const student = await User.findById(enrollment.student);
-
         const randomCode = 'NP-' + Math.random().toString(36).substring(2, 9).toUpperCase();
         
         await Certificate.create({
@@ -225,7 +220,9 @@ export const updateLectureProgress = async (req, res) => {
 // @access  Private/Admin
 export const getPendingEnrollments = async (req, res) => {
   try {
-    const pending = await Enrollment.find({ status: 'pending_approval' })
+    const pending = await Enrollment.find({ 
+      status: { $in: ['pending', 'pending_approval', 'pending_verification'] } 
+    })
       .populate('student', 'full_name name email phone')
       .populate('course', 'title title_ar price')
       .sort({ 'payment_proof.uploaded_at': -1 });
@@ -290,7 +287,7 @@ export const getDashboardStats = async (req, res) => {
       Course.countDocuments({}),
       Enrollment.countDocuments({}),
       Certificate.countDocuments({}),
-      Enrollment.countDocuments({ status: 'pending_approval' }),
+      Enrollment.countDocuments({ status: { $in: ['pending', 'pending_approval', 'pending_verification'] } }),
     ]);
 
     const recentEnrollments = await Enrollment.find({})

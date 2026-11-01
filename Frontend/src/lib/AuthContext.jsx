@@ -4,14 +4,18 @@ import { base44 } from '@/api/base44Client';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  // Read saved session synchronously on mount
+  // 1. Read saved user or default to null (NO HARDCODED DEFAULT DATA)
   const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem('noor_user');
-    return saved ? JSON.parse(saved) : { id: '1', full_name: 'Muyser', email: 'muyser@gmail.com', role: 'student' };
+    try {
+      const saved = localStorage.getItem('noor_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
   });
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('is_logged_in') === 'true' || Boolean(localStorage.getItem('noor_user'));
+    return localStorage.getItem('is_logged_in') === 'true' && Boolean(localStorage.getItem('noor_user'));
   });
 
   const [isLoadingAuth, setIsLoadingAuth] = useState(false);
@@ -19,15 +23,33 @@ export const AuthProvider = ({ children }) => {
   const [authError, setAuthError] = useState(null);
   const [authChecked, setAuthChecked] = useState(true);
 
-  // Synchronize state with local storage on initial mount
+  // Sync state if localStorage changes
   useEffect(() => {
     const loggedIn = localStorage.getItem('is_logged_in') === 'true';
-    if (loggedIn) {
+    const savedUser = localStorage.getItem('noor_user');
+    
+    if (loggedIn && savedUser) {
       setIsAuthenticated(true);
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch {}
     }
   }, []);
 
-  const login = async (email = 'muyser@gmail.com', password = '1234') => {
+  // Helper method so Login and Register pages can update AuthContext state immediately
+  const setAuthUser = (userData, token) => {
+    setUser(userData);
+    setIsAuthenticated(true);
+    if (userData) {
+      localStorage.setItem('noor_user', JSON.stringify(userData));
+      localStorage.setItem('is_logged_in', 'true');
+    }
+    if (token) {
+      localStorage.setItem('token', token);
+    }
+  };
+
+  const login = async (email, password) => {
     setIsLoadingAuth(true);
     
     try {
@@ -36,27 +58,11 @@ export const AuthProvider = ({ children }) => {
         base44.auth.setToken(res.access_token);
       }
     } catch (e) {
-      console.warn('Backend connection bypassed - using active local session');
+      console.warn('Backend connection bypassed');
     }
-
-    const userData = {
-      id: '1',
-      full_name: 'Muyser',
-      email: email || 'muyser@gmail.com',
-      role: 'student',
-    };
-
-    setUser(userData);
-    setIsAuthenticated(true);
-
-    // Save session flags to local storage
-    localStorage.setItem('is_logged_in', 'true');
-    localStorage.setItem('noor_user', JSON.stringify(userData));
-    localStorage.setItem('base44_token', 'mock-token-muyser');
 
     setIsLoadingAuth(false);
     setAuthChecked(true);
-    return userData;
   };
 
   const logout = (shouldRedirect = true) => {
@@ -64,6 +70,7 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
     localStorage.removeItem('is_logged_in');
     localStorage.removeItem('noor_user');
+    localStorage.removeItem('token');
     localStorage.removeItem('base44_token');
 
     try {
@@ -76,12 +83,15 @@ export const AuthProvider = ({ children }) => {
   };
 
   const checkUserAuth = async () => {
-    // If already marked logged in, don't revert to unauthenticated
-    if (localStorage.getItem('is_logged_in') === 'true') {
-      setIsAuthenticated(true);
-      setAuthChecked(true);
-      return;
+    const savedUser = localStorage.getItem('noor_user');
+    if (savedUser) {
+      try {
+        const parsed = JSON.parse(savedUser);
+        setUser(parsed);
+        setIsAuthenticated(true);
+      } catch {}
     }
+    setAuthChecked(true);
   };
 
   return (
@@ -94,6 +104,7 @@ export const AuthProvider = ({ children }) => {
         authError,
         authChecked,
         login,
+        setAuthUser, // Expose setAuthUser so Login/Register can push state instantly
         logout,
         checkUserAuth,
       }}

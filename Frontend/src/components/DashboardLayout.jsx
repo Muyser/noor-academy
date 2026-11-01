@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 import { 
   LayoutDashboard, BookOpen, Award, User, 
@@ -17,6 +17,37 @@ export default function DashboardLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Directly extract the real student name from localStorage or AuthContext instantly
+  const getStudentName = () => {
+    try {
+      const storedUser = localStorage.getItem('noor_user');
+      if (storedUser) {
+        const parsed = JSON.parse(storedUser);
+        if (parsed?.full_name) return parsed.full_name;
+        if (parsed?.name) return parsed.name;
+        if (parsed?.username) return parsed.username;
+        if (parsed?.email) return parsed.email.split('@')[0];
+      }
+    } catch (e) {
+      // Ignore parse errors
+    }
+
+    // Fallback to AuthContext user object if available and valid
+    if (user && user.email !== 'muyser@gmail.com') {
+      if (user?.full_name) return user.full_name;
+      if (user?.name) return user.name;
+      if (user?.email) return user.email.split('@')[0];
+    }
+
+    // Final fallback check
+    if (user?.full_name && user.full_name !== 'Muyser') return user.full_name;
+
+    return user?.full_name || user?.name || user?.email?.split('@')[0] || 'Student';
+  };
+
+  const studentName = getStudentName();
+  const studentInitial = studentName.charAt(0).toUpperCase();
 
   const navItems = [
     { icon: LayoutDashboard, label: t('dashboard.overview') || 'Overview', to: '/dashboard' },
@@ -44,6 +75,7 @@ export default function DashboardLayout() {
       // Clear all local auth storage keys
       localStorage.removeItem('token');
       localStorage.removeItem('noor_user');
+      localStorage.removeItem('is_logged_in');
       
       if (typeof logout === 'function') {
         try {
@@ -60,12 +92,6 @@ export default function DashboardLayout() {
 
   const isActive = (path) => location.pathname === path;
 
-  // 1. Get logged in student's name dynamically from AuthContext or localStorage
-  const studentName = user?.full_name || user?.name || user?.email?.split('@')[0] || 'Student';
-
-  // 2. Extract first letter for the circular avatar
-  const studentInitial = studentName.charAt(0).toUpperCase();
-
   return (
     <div className={`min-h-screen bg-[#f8fcfb] flex ${isRTL ? 'dir-rtl' : 'dir-ltr'}`}>
       
@@ -79,7 +105,7 @@ export default function DashboardLayout() {
               {studentInitial}
             </div>
             <div className="overflow-hidden">
-              <h1 className="font-extrabold text-sm tracking-wide text-white truncate">
+              <h1 className="font-extrabold text-sm tracking-wide text-white truncate" title={studentName}>
                 {studentName}
               </h1>
               <p className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">
@@ -155,7 +181,7 @@ export default function DashboardLayout() {
                     {studentInitial}
                   </div>
                   <div className="overflow-hidden">
-                    <p className="font-extrabold text-xs text-white truncate">
+                    <p className="font-extrabold text-xs text-white truncate" title={studentName}>
                       {studentName}
                     </p>
                     <p className="text-[9px] text-emerald-400 font-bold uppercase">

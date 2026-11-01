@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Clock, CheckCircle2, MessageCircle, ShieldCheck, ChevronRight, Users, MapPin, Video, Award, Calendar, Loader2, PlayCircle, Lock } from 'lucide-react';
+import { 
+  Clock, CheckCircle2, MessageCircle, ShieldCheck, ChevronRight, 
+  Users, MapPin, Video, Award, Calendar, Loader2, PlayCircle, Lock 
+} from 'lucide-react';
 import { useI18n } from '@/lib/useI18n';
 import { useAuth } from '@/lib/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -10,6 +13,35 @@ import { toast } from '@/components/ui/use-toast';
 import EnrollmentModal from './EnrollmentModal';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
+
+// Smart WhatsApp number formatter utility
+const formatWhatsAppNumber = (rawPhone) => {
+  if (!rawPhone) return "";
+  let cleaned = rawPhone.toString().trim().replace(/[^\d+]/g, "");
+  if (cleaned.startsWith("0")) {
+    cleaned = "250" + cleaned.substring(1); // Default country code fallback
+  }
+  if (cleaned.startsWith("+")) {
+    cleaned = cleaned.substring(1);
+  }
+  if (cleaned.length < 9) {
+    return "";
+  }
+  return cleaned;
+};
+
+// WhatsApp redirect handler
+const handleStudentWhatsApp = (adminPhone = "+250794420606", customMessage = "") => {
+  const formattedPhone = formatWhatsAppNumber(adminPhone);
+  if (!formattedPhone) {
+    console.error("Invalid WhatsApp phone number");
+    return;
+  }
+  const defaultMsg = encodeURIComponent(
+    customMessage || "Hello! I am a student at Noor Academy and I need assistance with course registration."
+  );
+  window.open(`https://wa.me/${formattedPhone}?text=${defaultMsg}`, "_blank");
+};
 
 export default function CourseDetail() {
   const { id } = useParams();
@@ -116,10 +148,11 @@ export default function CourseDetail() {
 
   const handleWhatsApp = () => {
     const courseTitle = isAr ? course?.title_ar || course?.title : course?.title;
-    const msg = encodeURIComponent(
-      `Hello! I am interested in registering for the in-person/offline course: ${courseTitle}`
-    );
-    window.open(`https://wa.me/250700000000?text=${msg}`, '_blank');
+    const msg = isAr 
+      ? `مرحباً، أنا طالب في أكاديمية نور وأرغب في التسجيل في الدورة الحضورية: ${courseTitle}`
+      : `Hello! I am a student at Noor Academy interested in the in-person course: ${courseTitle}`;
+    
+    handleStudentWhatsApp("0794420606", msg);
   };
 
   if (loading) {
@@ -258,8 +291,8 @@ export default function CourseDetail() {
               </div>
             </div>
 
-            {/* تم تصغير حجم الصورة هنا لتصبح أصغر وأكثر تناسقاً عبر max-w-[260px] sm:max-w-xs */}
-            <div className="w-full max-w-[260px] sm:max-w-xs mx-auto lg:max-w-sm aspect-video rounded-2xl sm:rounded-3xl overflow-hidden shadow-md bg-gray-900 border border-gray-100">
+            {/* Course Image Preview */}
+            <div className="w-full max-w-[260px] sm:max-w-xs mx-auto lg:max-w-sm aspect-video rounded-2xl sm:rounded-3xl overflow-hidden shadow-md bg-gray-900 border border-gray-100 relative">
               {course.image ? (
                 <Image src={course.image} alt={courseTitle} fittingType="fill" className="w-full h-full object-cover opacity-90" />
               ) : (
@@ -523,7 +556,7 @@ export default function CourseDetail() {
         </div>
       </div>
 
-      {/* FIXED MOBILE BOTTOM ENROLL BAR (Fixed Navbar style for mobile users) */}
+      {/* FIXED MOBILE BOTTOM ENROLL BAR */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-gray-200 px-4 py-3 shadow-2xl lg:hidden flex items-center justify-between gap-4">
         <div>
           <div className="text-[10px] font-bold text-gray-400 uppercase">
